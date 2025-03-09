@@ -295,26 +295,8 @@ google.script.run.withSuccessHandler(function(paymentUrl) {
       alert("Error generating payment link.");
     }
   } else {
-    // If the payment method is not "card", handle this case differently
-   // alert("Payment method is not 'card'. Performing alternative action.");
-           var dynamicHTML = `
-      <div class="form-container">
-        <h1>Payment by bank transfer</h1>
-        <p>Thank you, your form has been submitted.  Please now make your payment by bank transfer following the instructions below:</p>
-        <p><bImportant!</b>  Please quote the following reference on your payment: <b> ` + paymentUrl + `</b>
-        <p> Use the following bank account details to make your payment:
-        <ul>
-          <li><b>Payee name:</b> Golden Valley School Association</li>
-          <li><b>Sort code:</b> 30-96-26</li>
-          <li><b>Account no:</b> 80798360</li>
-        </ul>
-        <p>These instructions have also been sent to you by email.</p>
-        <p><b>Please note that payment <u>must</u> be received in advance of the disco - no payments will be accepted on the door.</b></p>
-      </div>
-    `;
-
-    // Replace the current page's content with the dynamic HTML
-    document.body.innerHTML = dynamicHTML;
+    // If the payment method is not "card", the response from the script will be the HTML with payment details.
+	    document.body.innerHTML = paymentUrl;
 }
 }).handleFormSubmit(formData);
 
