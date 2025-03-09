@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GVSA Disco Tickets</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f7fa;
+    }
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .child-section {
+      margin-bottom: 20px;
+    }
+    .payment-message {
+      margin-top: 10px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h1>GVSA Disco Tickets</h1>
+    <p>Please complete the form below to buy your tickets for the GVSA Disco.</p>
+
+    <form id="discoForm" onsubmit="handleFormSubmit(event)">
+      <!-- Your Details Section -->
+      <fieldset>
+        <legend>Your details</legend>
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+          <label for="phone" class="form-label">Telephone Number</label>
+          <input type="tel" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+       <div class="mb-3">
+          <label for="emailConfirm" class="form-label">Please re-enter your email address</label>
+          <input type="email" class="form-control" id="emailConfirm" name="emailConfirm" required>
+          <!-- Error message will appear here -->
+        <div id="emailConfirmError" class="text-danger" style="display: none;">The email addresses do not match.</div>
+        </div>
+      </fieldset>
+
+      <!-- Your Tickets Section -->
+      <fieldset>
+        <legend>Your tickets</legend>
+        <div class="mb-3">
+          <label for="numChildren" class="form-label">How many children are you buying tickets for?</label>
+          <select class="form-select" id="numChildren" name="numChildren" required>
+            <option value="">Select number of children</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </div>
+
+        <div id="childrenFields"></div> <!-- Placeholder for dynamic child fields -->
+        
+      </fieldset>
+
+      <!-- Important Information Section (moved below Your Tickets) -->
+      <fieldset>
+        <legend>Important information</legend>
+        <p>In order to make the disco happen, we need each child's parent/carer, or other nominated adult, to remain on site during the course of the disco. We also need parent volunteers to help supervise the event.  If not enough people volunteer to help, unfortunately the disco will need to be cancelled.  Please consider whether you can spare an hour (or more!) to help make this event a success.</p>
+        <div class="mb-3">
+          <label>
+            <input type="checkbox" id="accompany" required> I understand that the named accompanying adult will be required to remain on site for the duration of the disco
+          </label>
+        </div>
+        <div class="mb-3">
+          <label>
+            <input type="checkbox" id="volunteer"> I am willing to volunteer at the disco
+          </label>
+        </div>
+        <div class="mb-3">
+          <label>
+            <input type="checkbox" id="msgpermission"> I am happy to receive emails about future GVSA events and activities
+          </label>
+        </div>
+        <div class="mb-3">
+          <label>
+            <input type="checkbox" id="terms" required> I agree to the <a href="https://www.gvsa.org.uk/disco/disco-terms" target="_blank">terms and conditions</a>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- Payment Information Section -->
+      <fieldset>
+        <legend>Payment information</legend>
+        <div class="mb-3">
+          <label for="paymentMethod" class="form-label">Choose your payment method</label>
+          <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+            <option value="">Select payment method</option>
+            <option value="card">Pay by card</option>
+            <option value="bank">Pay by bank transfer</option>
+          </select>
+        </div>
+
+        <div id="paymentMessage" class="payment-message"></div>
+      </fieldset>
+      <p></p>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    // Handle dynamic fields for children
+   document.getElementById('numChildren').addEventListener('change', function() {
+  const numChildren = this.value;
+  const childrenFieldsContainer = document.getElementById('childrenFields');
+
+  // Store previously entered values
+  let previousData = {};
+  document.querySelectorAll('.child-section').forEach((section, index) => {
+    previousData[index] = {
+      session: document.getElementById(`session${index}`)?.value || '',
+      childName: document.getElementById(`childName${index}`)?.value || '',
+      childClass: document.getElementById(`childClass${index}`)?.value || '',
+      allergies: document.getElementById(`allergies${index}`)?.value || '',
+      accompanyingAdult: document.getElementById(`accompanyingAdult${index}`)?.value || '',
+      meChecked: document.getElementById(`me${index}`)?.checked || false
+    };
+  });
+
+  childrenFieldsContainer.innerHTML = ''; // Clear previous child fields
+
+  if (numChildren) {
+    for (let i = 0; i < numChildren; i++) {
+      const childSection = document.createElement('div');
+      childSection.classList.add('child-section');
+      childSection.innerHTML = `
+        <h5>Child ${i + 1}</h5>
+        <div class="mb-3">
+          <label for="session${i}" class="form-label">Session</label>
+          <select class="form-select" id="session${i}" name="session${i}">
+            <option value="session1">Session 1 (Years R/1/2) - 3pm to 4pm</option>
+            <option value="session2">Session 2 (Years 3/4) - 4:30pm to 5:30pm</option>
+            <option value="session3">Session 3 (Years 5/6) - 6pm to 7pm</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="childName${i}" class="form-label">Child's Name</label>
+          <input type="text" class="form-control" id="childName${i}" name="childName${i}">
+        </div>
+        <div class="mb-3">
+          <label for="childClass${i}" class="form-label">Child's Class</label>
+          <input type="text" class="form-control" id="childClass${i}" name="childClass${i}">
+        </div>
+        <div class="mb-3">
+          <label for="allergies${i}" class="form-label">Allergies or Medical Requirements</label>
+          <textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="accompanyingAdult${i}" class="form-label">Name of Accompanying Adult</label>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="me${i}" name="me${i}">
+            <label class="form-check-label" for="me${i}">Me</label>
+          </div>
+          <input type="text" class="form-control" id="accompanyingAdult${i}" name="accompanyingAdult${i}">
+        </div>
+        <hr>
+      `;
+      childrenFieldsContainer.appendChild(childSection);
+
+      // Restore previous values if they exist
+      if (previousData[i]) {
+        document.getElementById(`session${i}`).value = previousData[i].session;
+        document.getElementById(`childName${i}`).value = previousData[i].childName;
+        document.getElementById(`childClass${i}`).value = previousData[i].childClass;
+        document.getElementById(`allergies${i}`).value = previousData[i].allergies;
+        document.getElementById(`accompanyingAdult${i}`).value = previousData[i].accompanyingAdult;
+        document.getElementById(`me${i}`).checked = previousData[i].meChecked;
+      }
+    }
+  }
+});
+
+// Handle the "Me" checkbox interaction for each child
+document.addEventListener('change', function(event) {
+  if (event.target && event.target.id.startsWith('me')) {
+    const childIndex = event.target.id.replace('me', '');  // Extract index from ID
+    const accompanyingAdultInput = document.getElementById(`accompanyingAdult${childIndex}`);
+    const nameField = document.getElementById('name'); // Parent's name field
+    
+    if (event.target.checked) {
+      // If "Me" is checked, set the accompanying adult's name to the parent's name and disable the field
+      accompanyingAdultInput.value = nameField.value;
+      accompanyingAdultInput.disabled = true;
+    } else {
+      // If "Me" is unchecked, clear the field and enable it again
+      accompanyingAdultInput.value = '';
+      accompanyingAdultInput.disabled = false;
+    }
+  }
+});
+
+  //Add an event listening to check the email addresses match
+  document.getElementById('emailConfirm').addEventListener('blur', function() {
+    const email = document.getElementById('email').value;
+    const emailConfirm = this.value;
+    const emailConfirmError = document.getElementById('emailConfirmError');
+    // If the emails do not match, show the error message
+    if (email !== emailConfirm) {
+      emailConfirmError.style.display = 'block';
+      } else {
+      emailConfirmError.style.display = 'none';
+      }
+  });
+
+    // Show appropriate message based on selected payment method
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+      const paymentMessageElement = document.getElementById('paymentMessage');
+      const selectedPaymentMethod = this.value;
+      
+      if (selectedPaymentMethod === 'card') {
+        paymentMessageElement.innerHTML = "You will be redirected to our card payment processor (Stripe) once you have submitted this form.";
+      } else if (selectedPaymentMethod === 'bank') {
+        paymentMessageElement.innerHTML = "Once you have submitted this form, you will be redirected to the payment information page. Payment information will also be sent to you by email.";
+      } else {
+        paymentMessageElement.innerHTML = ''; // Clear message if no selection
+      }
+    });
+
+    // Handle form submission
+    function handleFormSubmit(event) {
+      event.preventDefault();  // Prevent the default form submission
+
+      const email = document.getElementById('email').value;
+      const emailConfirm = document.getElementById('emailConfirm').value;
+  
+      if (email !== emailConfirm) {
+        // Show error on submit if emails don't match
+        document.getElementById('emailConfirmError').style.display = 'block';
+      return;  // Stop form submission if emails don't match
+      }
+
+      //Disable the submission button to avoid multiple clicks
+      const submitButton = document.querySelector('button[type="submit"]');
+      submitButton.textContent = 'Submitting...';
+      submitButton.disabled = true;
+
+      // Collect form data
+      var formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        numChildren: document.getElementById('numChildren').value,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        agreeTerms: document.getElementById('terms').checked,
+        agreeMsg: document.getElementById('msgpermission'),
+        agreeStay: document.getElementById('accompany').checked,
+        willVolunteer: document.getElementById('volunteer').checked,
+      };
+
+      // Collect children data
+      var childrenData = [];
+      for (let i = 0; i < formData.numChildren; i++) {
+        childrenData.push({
+          session: document.getElementById(`session${i}`).value,
+          childName: document.getElementById(`childName${i}`).value,
+          childClass: document.getElementById(`childClass${i}`).value,
+          allergies: document.getElementById(`allergies${i}`).value,
+          accompanyingAdult: document.getElementById(`accompanyingAdult${i}`).value
+        });
+      }
+      formData.children = childrenData;
+
+
+// Trigger the Apps Script function to process the form data
+google.script.run.withSuccessHandler(function(paymentUrl) {
+  if (formData.paymentMethod === "card") {
+    // If the payment method is "card", redirect to the Stripe payment page
+    if (paymentUrl) {
+      //alert("You will now be redirected to the payment page");
+      window.top.location.href = paymentUrl;
+    } else {
+      alert("Error generating payment link.");
+    }
+  } else {
+    // If the payment method is not "card", handle this case differently
+   // alert("Payment method is not 'card'. Performing alternative action.");
+           var dynamicHTML = `
+      <div class="form-container">
+        <h1>Payment by bank transfer</h1>
+        <p>Thank you, your form has been submitted.  Please now make your payment by bank transfer following the instructions below:</p>
+        <p><bImportant!</b>  Please quote the following reference on your payment: <b> ` + paymentUrl + `</b>
+        <p> Use the following bank account details to make your payment:
+        <ul>
+          <li><b>Payee name:</b> Golden Valley School Association</li>
+          <li><b>Sort code:</b> 30-96-26</li>
+          <li><b>Account no:</b> 80798360</li>
+        </ul>
+        <p>These instructions have also been sent to you by email.</p>
+        <p><b>Please note that payment <u>must</u> be received in advance of the disco - no payments will be accepted on the door.</b></p>
+      </div>
+    `;
+
+    // Replace the current page's content with the dynamic HTML
+    document.body.innerHTML = dynamicHTML;
+}
+}).handleFormSubmit(formData);
+
+      // Call the Apps Script function to handle the form data
+      //google.script.run.withSuccessHandler(function(stripeSessionUrl) {
+       // if (stripeSessionUrl) {
+       //   // Show the URL in an alert before redirecting
+       //   alert("You will be redirected to the payment page: " + stripeSessionUrl);
+       //   window.top.location.href = stripeSessionUrl;
+      //  } else {
+      //    alert("Error generating payment link.");
+      //  }
+      //}).handleFormSubmit(formData);
+   }
+  </script>
+
+</body>
+</html>
