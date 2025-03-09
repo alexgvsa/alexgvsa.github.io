@@ -123,113 +123,111 @@
 
   <script>
     // Handle dynamic fields for children
-   document.getElementById('numChildren').addEventListener('change', function() {
-  const numChildren = this.value;
-  const childrenFieldsContainer = document.getElementById('childrenFields');
+	document.getElementById('numChildren').addEventListener('change', function() {
+	const numChildren = this.value;
+	const childrenFieldsContainer = document.getElementById('childrenFields');
 
-  // Store previously entered values
-  let previousData = {};
-  document.querySelectorAll('.child-section').forEach((section, index) => {
-    previousData[index] = {
-      session: document.getElementById(`session${index}`)?.value || '',
-      childName: document.getElementById(`childName${index}`)?.value || '',
-      childClass: document.getElementById(`childClass${index}`)?.value || '',
-      allergies: document.getElementById(`allergies${index}`)?.value || '',
-      accompanyingAdult: document.getElementById(`accompanyingAdult${index}`)?.value || '',
-      meChecked: document.getElementById(`me${index}`)?.checked || false
-    };
-  });
+	// Store previously entered values
+	let previousData = {};
+	document.querySelectorAll('.child-section').forEach((section, index) => {
+		previousData[index] = {
+		session: document.getElementById(`session${index}`)?.value || '',
+		childName: document.getElementById(`childName${index}`)?.value || '',
+		childClass: document.getElementById(`childClass${index}`)?.value || '',
+		allergies: document.getElementById(`allergies${index}`)?.value || '',
+		accompanyingAdult: document.getElementById(`accompanyingAdult${index}`)?.value || '',
+		meChecked: document.getElementById(`me${index}`)?.checked || false
+		};
+	});
 
-  childrenFieldsContainer.innerHTML = ''; // Clear previous child fields
+	childrenFieldsContainer.innerHTML = ''; // Clear previous child fields
 
-  if (numChildren) {
-    for (let i = 0; i < numChildren; i++) {
-      const childSection = document.createElement('div');
-      childSection.classList.add('child-section');
-      childSection.innerHTML = `
-        <h5>Child ${i + 1}</h5>
-        <div class="mb-3">
-          <label for="session${i}" class="form-label">Session</label>
-          <select class="form-select" id="session${i}" name="session${i}">
-            <option value="session1">Session 1 (Years R/1/2) - 3pm to 4pm</option>
-            <option value="session2">Session 2 (Years 3/4) - 4:30pm to 5:30pm</option>
-            <option value="session3">Session 3 (Years 5/6) - 6pm to 7pm</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="childName${i}" class="form-label">Child's Name</label>
-          <input type="text" class="form-control" id="childName${i}" name="childName${i}">
-        </div>
-        <div class="mb-3">
-          <label for="childClass${i}" class="form-label">Child's Class</label>
-          <input type="text" class="form-control" id="childClass${i}" name="childClass${i}">
-        </div>
-        <div class="mb-3">
-          <label for="allergies${i}" class="form-label">Allergies or Medical Requirements</label>
-          <textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none"></textarea>
-        </div>
-        <div class="mb-3">
-          <label for="accompanyingAdult${i}" class="form-label">Name of Accompanying Adult</label>
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="me${i}" name="me${i}">
-            <label class="form-check-label" for="me${i}">Me</label>
-          </div>
-          <input type="text" class="form-control" id="accompanyingAdult${i}" name="accompanyingAdult${i}">
-        </div>
-        <hr>
-      `;
-      childrenFieldsContainer.appendChild(childSection);
+	if (numChildren) {
+		for (let i = 0; i < numChildren; i++) {
+		const childSection = document.createElement('div');
+		childSection.classList.add('child-section');
+		childSection.innerHTML = `
+			<h5>Child ${i + 1}</h5>
+			<div class="mb-3">
+			<label for="session${i}" class="form-label">Session</label>
+			<select class="form-select" id="session${i}" name="session${i}">
+				<option value="session1">Session 1 (Years R/1/2) - 3pm to 4pm</option>
+				<option value="session2">Session 2 (Years 3/4) - 4:30pm to 5:30pm</option>
+				<option value="session3">Session 3 (Years 5/6) - 6pm to 7pm</option>
+			</select>
+			</div>
+			<div class="mb-3">
+			<label for="childName${i}" class="form-label">Child's Name</label>
+			<input type="text" class="form-control" id="childName${i}" name="childName${i}">
+			</div>
+			<div class="mb-3">
+			<label for="childClass${i}" class="form-label">Child's Class</label>
+			<input type="text" class="form-control" id="childClass${i}" name="childClass${i}">
+			</div>
+			<div class="mb-3">
+			<label for="allergies${i}" class="form-label">Allergies or Medical Requirements</label>
+			<textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none"></textarea>
+			</div>
+			<div class="mb-3">
+			<label for="accompanyingAdult${i}" class="form-label">Name of Accompanying Adult</label>
+			<div class="form-check">
+				<input type="checkbox" class="form-check-input" id="me${i}" name="me${i}">
+				<label class="form-check-label" for="me${i}">Me</label>
+			</div>
+			<input type="text" class="form-control" id="accompanyingAdult${i}" name="accompanyingAdult${i}">
+			</div>
+			<hr>
+			`;
+		childrenFieldsContainer.appendChild(childSection);
 
-      // Restore previous values if they exist
-      if (previousData[i]) {
-        document.getElementById(`session${i}`).value = previousData[i].session;
-        document.getElementById(`childName${i}`).value = previousData[i].childName;
-        document.getElementById(`childClass${i}`).value = previousData[i].childClass;
-        document.getElementById(`allergies${i}`).value = previousData[i].allergies;
-        document.getElementById(`accompanyingAdult${i}`).value = previousData[i].accompanyingAdult;
-        document.getElementById(`me${i}`).checked = previousData[i].meChecked;
-      }
-    }
-  }
-});
+		// Restore previous values if they exist
+		if (previousData[i]) {
+			document.getElementById(`session${i}`).value = previousData[i].session;
+			document.getElementById(`childName${i}`).value = previousData[i].childName;
+			document.getElementById(`childClass${i}`).value = previousData[i].childClass;
+			document.getElementById(`allergies${i}`).value = previousData[i].allergies;
+			document.getElementById(`accompanyingAdult${i}`).value = previousData[i].accompanyingAdult;
+			document.getElementById(`me${i}`).checked = previousData[i].meChecked;
+			}
+		}
+	}
+	});
 
-// Handle the "Me" checkbox interaction for each child
-document.addEventListener('change', function(event) {
-  if (event.target && event.target.id.startsWith('me')) {
-    const childIndex = event.target.id.replace('me', '');  // Extract index from ID
-    const accompanyingAdultInput = document.getElementById(`accompanyingAdult${childIndex}`);
-    const nameField = document.getElementById('name'); // Parent's name field
-    
-    if (event.target.checked) {
-      // If "Me" is checked, set the accompanying adult's name to the parent's name and disable the field
-      accompanyingAdultInput.value = nameField.value;
-      accompanyingAdultInput.disabled = true;
-    } else {
-      // If "Me" is unchecked, clear the field and enable it again
-      accompanyingAdultInput.value = '';
-      accompanyingAdultInput.disabled = false;
-    }
-  }
-});
+	// Handle the "Me" checkbox interaction for each child
+	document.addEventListener('change', function(event) {
+	if (event.target && event.target.id.startsWith('me')) {
+		const childIndex = event.target.id.replace('me', '');  // Extract index from ID
+		const accompanyingAdultInput = document.getElementById(`accompanyingAdult${childIndex}`);
+		const nameField = document.getElementById('name'); // Parent's name field
+		if (event.target.checked) {
+			// If "Me" is checked, set the accompanying adult's name to the parent's name and disable the field
+			accompanyingAdultInput.value = nameField.value;
+			accompanyingAdultInput.disabled = true;
+		} else {
+			// If "Me" is unchecked, clear the field and enable it again
+			accompanyingAdultInput.value = '';
+			accompanyingAdultInput.disabled = false;
+		}
+	}
+	});
 
-  //Add an event listening to check the email addresses match
-  document.getElementById('emailConfirm').addEventListener('blur', function() {
-    const email = document.getElementById('email').value;
-    const emailConfirm = this.value;
-    const emailConfirmError = document.getElementById('emailConfirmError');
-    // If the emails do not match, show the error message
-    if (email !== emailConfirm) {
-      emailConfirmError.style.display = 'block';
-      } else {
-      emailConfirmError.style.display = 'none';
-      }
-  });
+	//Add an event listening to check the email addresses match
+	document.getElementById('emailConfirm').addEventListener('blur', function() {
+		const email = document.getElementById('email').value;
+		const emailConfirm = this.value;
+		const emailConfirmError = document.getElementById('emailConfirmError');
+		// If the emails do not match, show the error message
+		if (email !== emailConfirm) {
+			emailConfirmError.style.display = 'block';
+		} else {
+			emailConfirmError.style.display = 'none';
+		}
+	});
 
     // Show appropriate message based on selected payment method
     document.getElementById('paymentMethod').addEventListener('change', function() {
       const paymentMessageElement = document.getElementById('paymentMessage');
       const selectedPaymentMethod = this.value;
-      
       if (selectedPaymentMethod === 'card') {
         paymentMessageElement.innerHTML = "You will be redirected to our card payment processor (Stripe) once you have submitted this form.";
       } else if (selectedPaymentMethod === 'bank') {
@@ -242,14 +240,12 @@ document.addEventListener('change', function(event) {
     // Handle form submission
     function handleFormSubmit(event) {
       event.preventDefault();  // Prevent the default form submission
-
       const email = document.getElementById('email').value;
       const emailConfirm = document.getElementById('emailConfirm').value;
-  
-      if (email !== emailConfirm) {
+	  if (email !== emailConfirm) {
         // Show error on submit if emails don't match
         document.getElementById('emailConfirmError').style.display = 'block';
-      return;  // Stop form submission if emails don't match
+		return;  // Stop form submission if emails don't match
       }
 
       //Disable the submission button to avoid multiple clicks
@@ -257,22 +253,22 @@ document.addEventListener('change', function(event) {
       submitButton.textContent = 'Submitting...';
       submitButton.disabled = true;
 
-      // Collect form data
-      var formData = {
+    // Collect form data
+    var formData = {
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,
         phone: document.getElementById('phone').value,
         numChildren: document.getElementById('numChildren').value,
         paymentMethod: document.getElementById('paymentMethod').value,
         agreeTerms: document.getElementById('terms').checked,
-        agreeMsg: document.getElementById('msgpermission'),
+        agreeMsg: document.getElementById('msgpermission').checked,
         agreeStay: document.getElementById('accompany').checked,
         willVolunteer: document.getElementById('volunteer').checked,
-      };
+		};
 
-      // Collect children data
-      var childrenData = [];
-      for (let i = 0; i < formData.numChildren; i++) {
+	// Collect children data
+	var childrenData = [];
+		for (let i = 0; i < formData.numChildren; i++) {
         childrenData.push({
           session: document.getElementById(`session${i}`).value,
           childName: document.getElementById(`childName${i}`).value,
@@ -283,34 +279,30 @@ document.addEventListener('change', function(event) {
       }
       formData.children = childrenData;
 
+	// **Replace with your actual Apps Script Web App URL**
+	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0PGQy-VdTi10-z7drtSx-_KadbdKNBpydo74qdidu2HDKkMhtxyxmW2WHhl6nbXfq/exec";
 
-// Trigger the Apps Script function to process the form data
-google.script.run.withSuccessHandler(function(paymentUrl) {
-  if (formData.paymentMethod === "card") {
-    // If the payment method is "card", redirect to the Stripe payment page
-    if (paymentUrl) {
-      //alert("You will now be redirected to the payment page");
-      window.top.location.href = paymentUrl;
+	// Send the data to the Google Apps Script Web App
+	fetch(APPS_SCRIPT_URL, {
+		redirect: "follow",
+		method: "POST",
+		mode: "cors",
+		headers: { "Content-Type": "text/plain;charset=utf-8" },
+		body: JSON.stringify(formData),
+	})
+	.then(response => response.text()) // or `.json()` if your script returns JSON
+	.then(paymentUrl => {
+    if (formData.paymentMethod === "card") {
+		window.location.href = paymentUrl; // Redirect for card payments
     } else {
-      alert("Error generating payment link.");
+		document.body.innerHTML = paymentUrl; // Show bank transfer details
     }
-  } else {
-    // If the payment method is not "card", the response from the script will be the HTML with payment details.
-	    document.body.innerHTML = paymentUrl;
-}
-}).handleFormSubmit(formData);
-
-      // Call the Apps Script function to handle the form data
-      //google.script.run.withSuccessHandler(function(stripeSessionUrl) {
-       // if (stripeSessionUrl) {
-       //   // Show the URL in an alert before redirecting
-       //   alert("You will be redirected to the payment page: " + stripeSessionUrl);
-       //   window.top.location.href = stripeSessionUrl;
-      //  } else {
-      //    alert("Error generating payment link.");
-      //  }
-      //}).handleFormSubmit(formData);
-   }
+	})
+  .catch(error => {
+		console.error("Error:", error);
+		alert("There was an error submitting the form.");
+	});
+	}
   </script>
 
 </body>
