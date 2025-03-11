@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GVSA Disco</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f7fa;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+        <h1>GVSA Disco Tickets</h1>
+        <p style="font-size: 1.2em; color: red;"><b>Your card payment has been cancelled</b></p>
+		<p>Your ticket request form has been submitted and your tickets reserved, but <b>payment has not yet been made</b>.  If you wish to try paying by card again, click the unique card payment link in your confirmation email.</p>
+		<p><i>Please note that the link is only valid for 24 hours. After that time, you will need to pay by bank transfer.</i></p>
+		<p><b>Payment <u>must</u> be received in advance of the disco - no payments will be accepted on the door.</b></p>
+		<hr>
+		<p>If you would prefer to pay by bank transfer, please follow these instructions:</p>
+        <p><bImportant!</b>You must quote the following reference on your payment: <b> <span id="paymentRef"></span></b>
+			<div style="line-height: 1.1;">
+				<p><b>Payee name:</b> Golden Valley School Association</p>
+				<p><b>Sort code:</b> 30-96-26</p>
+				<p><b>Account no:</b> 80798360</p>
+</div>
+        <p>These instructions have also been sent to you by email.</p>
+      </div>
+  
+
+  <script>
+    // Extract the payment reference from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentRef = urlParams.get('ID');
+    if (paymentRef) {
+      document.getElementById('paymentRef').textContent = paymentRef;
+    }
+  </script>
+</body>
+</html>
