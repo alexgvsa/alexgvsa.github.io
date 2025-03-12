@@ -157,7 +157,7 @@
 			</select>
 			</div>
 			<div class="mb-3">
-			<label for="childName${i}" class="form-label">Child's Name</label>
+			<label for="childName${i}" class="form-label">Child's Full Name</label>
 			<input type="text" class="form-control" id="childName${i}" name="childName${i}" required>
 			</div>
 			<div class="mb-3">
@@ -193,6 +193,19 @@
 	}
 	});
 
+	// Update accompanying adult name when the parent's name field changes
+	document.getElementById('name').addEventListener('input', function() {
+    	document.querySelectorAll('[id^="me"]').forEach(checkbox => {
+	        const index = checkbox.id.replace('me', '');  
+	        const accompanyingAdultInput = document.getElementById(`accompanyingAdult${index}`);
+	
+	        if (checkbox.checked) {
+            	accompanyingAdultInput.value = this.value;  // Update with the parent's name
+        	}
+    		});
+	});
+	
+	  
 	// Handle the "Me" checkbox interaction for each child
 	document.addEventListener('change', function(event) {
 	if (event.target && event.target.id.startsWith('me')) {
