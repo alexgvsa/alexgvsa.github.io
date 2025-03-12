@@ -296,16 +296,16 @@ document.getElementById('email').addEventListener('blur', checkEmailValid);
 document.getElementById('emailConfirm').addEventListener('blur', checkEmailSame);
 
 // Prevent form submission if emails are invalid
-document.getElementById('discoForm').addEventListener('submit', function(event) {
-    if (!checkEmailValid()) {
-        event.preventDefault(); // Stop form submission
-        alert("Please enter a valid email address and ensure both emails match.");
-    }
-	if (!checkEmailSame()) {
-        event.preventDefault(); // Stop form submission
-        alert("Please enter a valid email address and ensure both emails match.");
-    }
-});
+//document.getElementById('discoForm').addEventListener('submit', function(event) {
+ //   if (!checkEmailValid()) {
+ //       event.preventDefault(); // Stop form submission
+ //       alert("Please enter a valid email address and ensure both emails match.");
+ //   }
+//	if (!checkEmailSame()) {
+//        event.preventDefault(); // Stop form submission
+//        alert("Please enter a valid email address and ensure both emails match.");
+//    }
+//});
 	  
     // Show appropriate message based on selected payment method
     document.getElementById('paymentMethod').addEventListener('change', function() {
@@ -325,10 +325,20 @@ document.getElementById('discoForm').addEventListener('submit', function(event) 
       event.preventDefault();  // Prevent the default form submission
 
 	// Call the checkEmails function to validate format and matching
-    if (!checkEmails()) {
+    //if (!checkEmails()) {
+     //   alert("Please enter a valid email address and ensure both emails match.");
+     //   return;  // Stop form submission if emails are invalid or don't match
+   // }
+
+	 if (!checkEmailValid()) {
+        event.preventDefault(); // Stop form submission
+       alert("Please enter a valid email address and ensure both emails match.");
+   }
+	if (!checkEmailSame()) {
+        event.preventDefault(); // Stop form submission
         alert("Please enter a valid email address and ensure both emails match.");
-        return;  // Stop form submission if emails are invalid or don't match
     }
+    
 
       //Disable the submission button to avoid multiple clicks
       const submitButton = document.querySelector('button[type="submit"]');
