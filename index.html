@@ -226,7 +226,6 @@
         	}
     		});
 	});
-	
 	  
 	// Handle the "Me" checkbox interaction for each child
 	document.addEventListener('change', function(event) {
@@ -243,7 +242,7 @@
 			accompanyingAdultInput.value = '';
 			accompanyingAdultInput.disabled = false;
 		}
-	}
+		}
 	});
 
 function validateEmail(email) {
@@ -296,10 +295,8 @@ function checkEmailSame() {
   function validatePhoneNumber(phone) {
     // Remove spaces to count only digits
     const cleanedPhone = phone.replace(/\s+/g, '');
-
     // Regex to check if phone starts with 07, 01, or 02 and has exactly 11 digits
     const phonePattern = /^(07|01|02)\d{9}$/;
-
     return phonePattern.test(cleanedPhone);
   }
 
@@ -352,58 +349,55 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
       }
     });
 
-    // Handle form submission
+	// Handle form submission
     function handleFormSubmit(event) {
-   //   event.preventDefault();  // Prevent the default form submission
+   	//event.preventDefault();  // Prevent the default form submission
 
-
-	 if (!checkEmailValid()) {
-        event.preventDefault(); // Stop form submission
-		 return;
-       //alert("Please enter a valid email address and ensure both emails match.");
-   }
-	if (!checkEmailSame()) {
-        event.preventDefault(); // Stop form submission
+	if (!checkEmailValid()) {
+        	event.preventDefault(); // Stop form submission
 		return;
-       // alert("Please enter a valid email address and ensure both emails match.");
-    }
+       		//alert("Please enter a valid email address and ensure both emails match.");
+   	}
+	if (!checkEmailSame()) {
+        	event.preventDefault(); // Stop form submission
+		return;
+       		// alert("Please enter a valid email address and ensure both emails match.");
+    	}
+	if (!checkPhoneNumber()) {
+        	event.preventDefault(); // Stop form submission
+      		return;  // Stop form submission if phone number is invalid
+    	}
 
-	    // Check phone number validity
-    if (!checkPhoneNumber()) {
-        event.preventDefault(); // Stop form submission
-      return;  // Stop form submission if phone number is invalid
-    }
+      	//Disable the submission button to avoid multiple clicks
+      	const submitButton = document.querySelector('button[type="submit"]');
+      	submitButton.textContent = 'Submitting...';
+      	submitButton.disabled = true;
 
-      //Disable the submission button to avoid multiple clicks
-      const submitButton = document.querySelector('button[type="submit"]');
-      submitButton.textContent = 'Submitting...';
-      submitButton.disabled = true;
-
-    // Collect form data
-    var formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
-        numChildren: document.getElementById('numChildren').value,
-        paymentMethod: document.getElementById('paymentMethod').value,
-        agreeTerms: document.getElementById('terms').checked,
-        agreeMsg: document.getElementById('msgpermission').checked,
-        agreeStay: document.getElementById('accompany').checked,
-        willVolunteer: document.getElementById('volunteer').checked,
+    	// Collect form data
+    	var formData = {
+	        name: document.getElementById('name').value,
+	        email: document.getElementById('email').value,
+	        phone: document.getElementById('phone').value,
+	        numChildren: document.getElementById('numChildren').value,
+	        paymentMethod: document.getElementById('paymentMethod').value,
+	        agreeTerms: document.getElementById('terms').checked,
+	        agreeMsg: document.getElementById('msgpermission').checked,
+	        agreeStay: document.getElementById('accompany').checked,
+	        willVolunteer: document.getElementById('volunteer').checked,
 		};
 
-	// Collect children data
+		// Collect children data
 	var childrenData = [];
 		for (let i = 0; i < formData.numChildren; i++) {
-        childrenData.push({
-          session: document.getElementById(`session${i}`).value,
-          childName: document.getElementById(`childName${i}`).value,
-          childClass: document.getElementById(`childClass${i}`).value,
-          allergies: document.getElementById(`allergies${i}`).value,
-          accompanyingAdult: document.getElementById(`accompanyingAdult${i}`).value
-        });
-      }
-      formData.children = childrenData;
+	  		childrenData.push({
+          		session: document.getElementById(`session${i}`).value,
+          		childName: document.getElementById(`childName${i}`).value,
+          		childClass: document.getElementById(`childClass${i}`).value,
+          		allergies: document.getElementById(`allergies${i}`).value,
+          		accompanyingAdult: document.getElementById(`accompanyingAdult${i}`).value
+        		});
+      		}
+      		formData.children = childrenData;
 
 	// **Replace with your actual Apps Script Web App URL**
 	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsVPxZvL9ChglarrkN06QAzNsOcT0n5vYRlqZht0CJt5aB1Rpo-Lj3UjHVGoZoaiPu/exec";
@@ -415,16 +409,16 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 		mode: "cors",
 		headers: { "Content-Type": "text/plain;charset=utf-8" },
 		body: JSON.stringify(formData),
-	})
+		})
 	.then(response => response.text()) // or `.json()` if your script returns JSON
 	.then(paymentUrl => {
-    if (formData.paymentMethod === "card") {
+    	if (formData.paymentMethod === "card") {
 		window.location.href = paymentUrl; // Redirect for card payments
-    } else {
+    	} else {
 		document.body.innerHTML = paymentUrl; // Show bank transfer details
-    }
+    	}
 	})
-  .catch(error => {
+  	.catch(error => {
 		console.error("Error:", error);
 		alert("There was an error submitting the form: " + error);
 	});
