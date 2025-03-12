@@ -164,8 +164,27 @@
 			</div>
 			<div class="mb-3">
 			<label for="childClass${i}" class="form-label">Child's Class</label>
-			<input type="text" class="form-control" id="childClass${i}" name="childClass${i}" required>
-			</div>
+			  
+   			<!-- <input type="text" class="form-control" id="childClass${i}" name="childClass${i}" required> -->
+			<!-- Above line used when class was a text box. Replaced with dropdown below.-->
+			<select class="form-select" id="childClass${i}" name="childClass${i}" required>
+            			<option value="" disabled selected>Select Class</option>
+            			<option value="YR">YR Robin</option>
+	       			<option value="YR">YR Sparrow</option>
+            			<option value="1">Y1 Goldfinch</option>
+	       			<option value="1">Y1 Kingfisher</option>
+            			<option value="2">Y2 Blackbird</option>
+	       			<option value="2">Y2 Swallow</option>
+            			<option value="3">Y3 Jay</option>
+	       			<option value="3">Y3 Owl</option>
+            			<option value="4">Y4 Swift</option>
+	       			<option value="4">Y4 Wagtail</option>
+			        <option value="5">Y5 Nightingale</option>
+	       			<option value="5">Y5 Woodpecker</option>
+            			<option value="6">Y6 Falcon</option>
+	       			<option value="6">Y6 Kestrel</option>
+        		</select>
+   			</div>
 			<div class="mb-3">
 			<label for="allergies${i}" class="form-label">Allergies or Medical Requirements</label>
 			<textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none"></textarea>
@@ -288,13 +307,12 @@ document.getElementById('discoForm').addEventListener('submit', function(event) 
     // Handle form submission
     function handleFormSubmit(event) {
       event.preventDefault();  // Prevent the default form submission
-      const email = document.getElementById('email').value;
-      const emailConfirm = document.getElementById('emailConfirm').value;
-	  if (email !== emailConfirm) {
-        // Show error on submit if emails don't match
-        document.getElementById('emailConfirmError').style.display = 'block';
-		return;  // Stop form submission if emails don't match
-      }
+
+	// Call the checkEmails function to validate format and matching
+    if (!checkEmails()) {
+        alert("Please enter a valid email address and ensure both emails match.");
+        return;  // Stop form submission if emails are invalid or don't match
+    }
 
       //Disable the submission button to avoid multiple clicks
       const submitButton = document.querySelector('button[type="submit"]');
