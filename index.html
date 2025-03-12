@@ -49,12 +49,14 @@
         <div class="mb-3">
           <label for="email" class="form-label">Email Address</label>
           <input type="email" class="form-control" id="email" name="email" required>
+	  <div id="emailFormatError" class="text-danger" style="display: none;">Please enter a valid email address.</div>
         </div>
        <div class="mb-3">
           <label for="emailConfirm" class="form-label">Please re-enter your email address</label>
           <input type="email" class="form-control" id="emailConfirm" name="emailConfirm" required>
           <!-- Error message will appear here -->
         <div id="emailConfirmError" class="text-danger" style="display: none;">The email addresses do not match.</div>
+	
         </div>
       </fieldset>
 
@@ -224,19 +226,52 @@
 	}
 	});
 
-	//Add an event listening to check the email addresses match
-	document.getElementById('emailConfirm').addEventListener('blur', function() {
-		const email = document.getElementById('email').value;
-		const emailConfirm = this.value;
-		const emailConfirmError = document.getElementById('emailConfirmError');
-		// If the emails do not match, show the error message
-		if (email !== emailConfirm) {
-			emailConfirmError.style.display = 'block';
-		} else {
-			emailConfirmError.style.display = 'none';
-		}
-	});
+function validateEmail(email) {
+    // Regular expression for validating email format
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(email);
+}
 
+// Function to check emails match and validate format
+function checkEmails() {
+    const email = document.getElementById('email').value.trim();
+    const emailConfirm = document.getElementById('emailConfirm').value.trim();
+    const emailError = document.getElementById('emailConfirmError');
+    const emailFormatError = document.getElementById('emailFormatError');
+
+    let isValid = true;
+
+    // Validate email format
+    if (!validateEmail(email)) {
+        emailFormatError.style.display = 'block';
+        isValid = false;
+    } else {
+        emailFormatError.style.display = 'none';
+    }
+
+    // Check if emails match
+    if (email !== emailConfirm) {
+        emailError.style.display = 'block';
+        isValid = false;
+    } else {
+        emailError.style.display = 'none';
+    }
+
+    return isValid;
+}
+
+// Run validation when the user leaves the email fields
+document.getElementById('email').addEventListener('blur', checkEmails);
+document.getElementById('emailConfirm').addEventListener('blur', checkEmails);
+
+// Prevent form submission if emails are invalid
+document.getElementById('discoForm').addEventListener('submit', function(event) {
+    if (!checkEmails()) {
+        event.preventDefault(); // Stop form submission
+        alert("Please enter a valid email address and ensure both emails match.");
+    }
+});
+	  
     // Show appropriate message based on selected payment method
     document.getElementById('paymentMethod').addEventListener('change', function() {
       const paymentMessageElement = document.getElementById('paymentMessage');
