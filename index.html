@@ -66,7 +66,7 @@
         <div class="mb-3">
           <label for="numChildren" class="form-label">How many children are you buying tickets for?</label>
           <select class="form-select" id="numChildren" name="numChildren" required>
-            <option value="">Select number of children</option>
+            <option value="" disabled selected>Select number of children</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -252,13 +252,16 @@ function validateEmail(email) {
 }
 
 // Function to check emails match and validate format
-function checkEmails() {
+function checkEmailValid() {
     const email = document.getElementById('email').value.trim();
-    const emailConfirm = document.getElementById('emailConfirm').value.trim();
-    const emailError = document.getElementById('emailConfirmError');
     const emailFormatError = document.getElementById('emailFormatError');
-
     let isValid = true;
+	
+	// If email is blank, skip validation
+    if (email === '') {
+	emailFormatError.style.display = 'none';
+	    return isValid; // Skip the validation
+    }
 
     // Validate email format
     if (!validateEmail(email)) {
@@ -267,7 +270,16 @@ function checkEmails() {
     } else {
         emailFormatError.style.display = 'none';
     }
+    return isValid;
+}
 
+function checkEmailSame() {
+    const email = document.getElementById('email').value.trim();
+    const emailConfirm = document.getElementById('emailConfirm').value.trim();
+    const emailError = document.getElementById('emailConfirmError');
+    const emailFormatError = document.getElementById('emailFormatError');
+
+    let isValid = true;
     // Check if emails match
     if (email !== emailConfirm) {
         emailError.style.display = 'block';
@@ -280,12 +292,16 @@ function checkEmails() {
 }
 
 // Run validation when the user leaves the email fields
-document.getElementById('email').addEventListener('blur', checkEmails);
-document.getElementById('emailConfirm').addEventListener('blur', checkEmails);
+document.getElementById('email').addEventListener('blur', checkEmailValid);
+document.getElementById('emailConfirm').addEventListener('blur', checkEmailSame);
 
 // Prevent form submission if emails are invalid
 document.getElementById('discoForm').addEventListener('submit', function(event) {
-    if (!checkEmails()) {
+    if (!checkEmailValid()) {
+        event.preventDefault(); // Stop form submission
+        alert("Please enter a valid email address and ensure both emails match.");
+    }
+	if (!checkEmailSame()) {
         event.preventDefault(); // Stop form submission
         alert("Please enter a valid email address and ensure both emails match.");
     }
