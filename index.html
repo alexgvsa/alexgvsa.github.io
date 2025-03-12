@@ -45,6 +45,7 @@
         <div class="mb-3">
           <label for="phone" class="form-label">Telephone Number</label>
           <input type="tel" class="form-control" id="phone" name="phone" required>
+	  <div id="phoneError" class="text-danger" style="display: none;">Please enter a valid phone number</div>
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email Address</label>
@@ -291,10 +292,41 @@ function checkEmailSame() {
     return isValid;
 }
 
-// Run validation when the user leaves the email fields
+ // Validate UK phone number (must start with 07, 01, or 02 and contain 11 digits, spaces allowed)
+  function validatePhoneNumber(phone) {
+    // Remove spaces to count only digits
+    const cleanedPhone = phone.replace(/\s+/g, '');
+
+    // Regex to check if phone starts with 07, 01, or 02 and has exactly 11 digits
+    const phonePattern = /^(07|01|02)\d{9}$/;
+
+    return phonePattern.test(cleanedPhone);
+  }
+
+  // Function to check phone number format
+  function checkPhoneNumber() {
+    const phone = document.getElementById('phone').value.trim();
+    const phoneError = document.getElementById('phoneError');
+
+    let isValid = true;
+    // Check if phone number matches the valid pattern
+    if (!validatePhoneNumber(phone)) {
+      phoneError.style.display = 'block';
+      isValid = false;
+    } else {
+      phoneError.style.display = 'none';
+    }
+
+    return isValid;
+  }
+	  
+	  
+	  
+// Run validation when the user leaves the email and phone fields
 document.getElementById('email').addEventListener('blur', checkEmailValid);
 document.getElementById('emailConfirm').addEventListener('blur', checkEmailSame);
-
+document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
+	  
 // Prevent form submission if emails are invalid
 //document.getElementById('discoForm').addEventListener('submit', function(event) {
  //   if (!checkEmailValid()) {
@@ -322,23 +354,25 @@ document.getElementById('emailConfirm').addEventListener('blur', checkEmailSame)
 
     // Handle form submission
     function handleFormSubmit(event) {
-      event.preventDefault();  // Prevent the default form submission
+   //   event.preventDefault();  // Prevent the default form submission
 
-	// Call the checkEmails function to validate format and matching
-    //if (!checkEmails()) {
-     //   alert("Please enter a valid email address and ensure both emails match.");
-     //   return;  // Stop form submission if emails are invalid or don't match
-   // }
 
 	 if (!checkEmailValid()) {
         event.preventDefault(); // Stop form submission
-       alert("Please enter a valid email address and ensure both emails match.");
+		 return;
+       //alert("Please enter a valid email address and ensure both emails match.");
    }
 	if (!checkEmailSame()) {
         event.preventDefault(); // Stop form submission
-        alert("Please enter a valid email address and ensure both emails match.");
+		return;
+       // alert("Please enter a valid email address and ensure both emails match.");
     }
-    
+
+	    // Check phone number validity
+    if (!checkPhoneNumber()) {
+        event.preventDefault(); // Stop form submission
+      return;  // Stop form submission if phone number is invalid
+    }
 
       //Disable the submission button to avoid multiple clicks
       const submitButton = document.querySelector('button[type="submit"]');
@@ -392,7 +426,7 @@ document.getElementById('emailConfirm').addEventListener('blur', checkEmailSame)
 	})
   .catch(error => {
 		console.error("Error:", error);
-		alert("There was an error submitting the form.");
+		alert("There was an error submitting the form: " + error);
 	});
 	}
   </script>
