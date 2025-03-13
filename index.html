@@ -286,13 +286,14 @@ document.addEventListener('change', function(event) {
 
 function validateSession() {
     const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
-
+	let isValid = true;  // Flag to track if the form is valid
     for (let i = 0; i < numChildren; i++) {
         const session = document.getElementById(`session${i}`)?.value;
         const childClass = document.getElementById(`childClass${i}`)?.value;
         const sessionError = document.getElementById(`sessionError${i}`);
 		sessionError.style.display = 'none';
-        // Define your session and class combinations here
+        
+		// Define your session and class combinations here
         // Example:
         if ((childClass === "RR" && session !== "session1") ||
             (childClass === "RS" && session !== "session1") ||
@@ -309,9 +310,10 @@ function validateSession() {
             (childClass === "6F" && session !== "session4") ||
             (childClass === "6K" && session !== "session4")) {
             sessionError.style.display = 'block';
-            return; // Exit the function after showing the first error
+            isValid = false;
         }
     }
+	return isValid;
 }
 
 	// Update accompanying adult name when the parent's name field changes
@@ -493,7 +495,7 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 		};
 
 		// Collect children data
-	var childrenData = [];
+		var childrenData = [];
 		for (let i = 0; i < formData.numChildren; i++) {
 	  		childrenData.push({
           		session: document.getElementById(`session${i}`).value,
@@ -504,10 +506,10 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
         		});
       		}
       		formData.children = childrenData;
-			formData.totalValue = payingChildren * 4   ///UPDATE HERE WITH PRICE OF DISCO TICKET
+			formData.totalValue = formData.payingChildren
 
 	// **Replace with your actual Apps Script Web App URL**
-	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsVPxZvL9ChglarrkN06QAzNsOcT0n5vYRlqZht0CJt5aB1Rpo-Lj3UjHVGoZoaiPu/exec";
+	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwWNbjteEqpLVbLH6r7JDhJu1XsymwPJ9p-u1MU8C-2RRutRy8wThR_FcF82-lW7C-A/exec";
 
 	// Send the data to the Google Apps Script Web App
 	fetch(APPS_SCRIPT_URL, {
