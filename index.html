@@ -73,7 +73,10 @@
             <option value="3">3</option>
             <option value="4">4</option>
           </select>
+			  <!--  <input type="hidden" id="hiddenField" name="hiddenField" value="">  // USE IN PRODUCTION -->
+			 <input type="text" id="hiddenField" name="hiddenField" value="">  <!-- // USE FOR TESTING -->
         </div>
+
 
         <div id="childrenFields"></div> <!-- Placeholder for dynamic child fields -->
         
@@ -113,7 +116,7 @@
         <div class="mb-3">
           <label for="paymentMethod" class="form-label">Choose your payment method</label>
           <select class="form-select" id="paymentMethod" name="paymentMethod" required>
-            <option value="">Select payment method</option>
+            <option value="" disabled selected>Select payment method</option>
             <option value="card">Pay by card</option>
             <option value="bank">Pay by bank transfer</option>
           </select>
@@ -127,7 +130,43 @@
   </div>
 
   <script>
-    // Handle dynamic fields for children
+    
+	
+	function updateHiddenField() {
+        const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
+        let pupilPremiumCount = 0;
+
+        for (let i = 0; i < numChildren; i++) {
+            if (document.getElementById(`pp${i}`) && document.getElementById(`pp${i}`).checked) {
+                pupilPremiumCount++;
+            }
+        }
+
+        const payingChildren = numChildren - pupilPremiumCount;
+		document.getElementById('hiddenField').value = payingChildren;
+    
+		const paymentMethodSelect = document.getElementById('paymentMethod');
+
+		if (payingChildren === 0) {
+			paymentMethodSelect.innerHTML = '<option value="">Payment not required. Please click Submit below.</option>';
+			paymentMethodSelect.disabled = true;
+			
+			const paymentMessageElement = document.getElementById('paymentMessage');
+			paymentMessageElement.innerHTML = ''; // Clear message if no selection
+			
+		} else {
+			paymentMethodSelect.innerHTML = `
+				<option value="" disabled selected>Select payment method</option>
+				<option value="card">Pay by card</option>
+				<option value="bank">Pay by bank transfer</option>
+			`;
+			paymentMethodSelect.disabled = false;
+		}
+
+	}
+	
+	
+	// Handle dynamic fields for children
 	document.getElementById('numChildren').addEventListener('change', function() {
 	const numChildren = this.value;
 	const childrenFieldsContainer = document.getElementById('childrenFields');
@@ -141,7 +180,8 @@
 		childClass: document.getElementById(`childClass${index}`)?.value || '',
 		allergies: document.getElementById(`allergies${index}`)?.value || '',
 		accompanyingAdult: document.getElementById(`accompanyingAdult${index}`)?.value || '',
-		meChecked: document.getElementById(`me${index}`)?.checked || false
+		meChecked: document.getElementById(`me${index}`)?.checked || false,
+		ppChecked: document.getElementById(`pp${index}`)?.checked || false
 		};
 	});
 
@@ -162,10 +202,11 @@
 			<div class="mb-3">
 			<label for="session${i}" class="form-label">Session</label>
 			<select class="form-select" id="session${i}" name="session${i}" required>
+				<option value="" disabled selected>Select session</option>
 				<option value="session1">Session 1 (Reception) - 2pm to 3:15pm</option>
-				<option value="session1">Session 2 (Years 1/2) - 3:30pm to 4:45pm</option>
-				<option value="session2">Session 3 (Years 3/4) - 5pm to 6:15pm</option>
-				<option value="session3">Session 4 (Years 5/6) - 6:30pm to 7:45pm</option>
+				<option value="session2">Session 2 (Years 1/2) - 3:30pm to 4:45pm</option>
+				<option value="session3">Session 3 (Years 3/4) - 5pm to 6:15pm</option>
+				<option value="session4">Session 4 (Years 5/6) - 6:30pm to 7:45pm</option>
 			</select>
 			</div>
 			<div class="mb-3">
@@ -178,23 +219,25 @@
    			<!-- <input type="text" class="form-control" id="childClass${i}" name="childClass${i}" required> -->
 			<!-- Above line used when class was a text box. Replaced with dropdown below.-->
 			<select class="form-select" id="childClass${i}" name="childClass${i}" required>
-            			<option value="" disabled selected>Select Class</option>
-            			<option value="YR">YR Robin</option>
-	       			<option value="YR">YR Sparrow</option>
-            			<option value="1">Y1 Goldfinch</option>
-	       			<option value="1">Y1 Kingfisher</option>
-            			<option value="2">Y2 Blackbird</option>
-	       			<option value="2">Y2 Swallow</option>
-            			<option value="3">Y3 Jay</option>
-	       			<option value="3">Y3 Owl</option>
-            			<option value="4">Y4 Swift</option>
-	       			<option value="4">Y4 Wagtail</option>
-			        <option value="5">Y5 Nightingale</option>
-	       			<option value="5">Y5 Woodpecker</option>
-            			<option value="6">Y6 Falcon</option>
-	       			<option value="6">Y6 Kestrel</option>
+            		<option value="" disabled selected>Select Class</option>
+            		<option value="RR">YR Robin</option>
+	       			<option value="RS">YR Sparrow</option>
+            		<option value="1G">Y1 Goldfinch</option>
+	       			<option value="1K">Y1 Kingfisher</option>
+            		<option value="2B">Y2 Blackbird</option>
+	       			<option value="2S">Y2 Swallow</option>
+            		<option value="3J">Y3 Jay</option>
+	       			<option value="3O">Y3 Owl</option>
+            		<option value="4S">Y4 Swift</option>
+	       			<option value="4W">Y4 Wagtail</option>
+			        <option value="5N">Y5 Nightingale</option>
+	       			<option value="5W">Y5 Woodpecker</option>
+            		<option value="6F">Y6 Falcon</option>
+	       			<option value="6K">Y6 Kestrel</option>
         		</select>
    			</div>
+			<div id="sessionError${i}" class="text-danger" style="display: none;">Please check you have selected the correct disco session above for this class</div>
+			<p></p>
 			<div class="mb-3">
 			<label for="allergies${i}" class="form-label">Allergies or Medical Requirements</label>
 			<textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none"></textarea>
@@ -219,10 +262,57 @@
 			document.getElementById(`allergies${i}`).value = previousData[i].allergies;
 			document.getElementById(`accompanyingAdult${i}`).value = previousData[i].accompanyingAdult;
 			document.getElementById(`me${i}`).checked = previousData[i].meChecked;
+			document.getElementById(`pp${i}`).checked = previousData[i].ppChecked;
 			}
 		}
 	}
+	updateHiddenField();
 	});
+
+		// Add event listeners to pupil premium checkboxes
+        document.addEventListener('change', function(event) {
+            if (event.target && event.target.id.startsWith('pp')) {
+                updateHiddenField();
+            }
+        });
+
+
+// Add event listener to session and childClass dropdowns
+document.addEventListener('change', function(event) {
+    if (event.target && (event.target.id.startsWith('session') || event.target.id.startsWith('childClass'))) {
+        validateSession();
+    }
+});
+
+function validateSession() {
+    const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
+
+    for (let i = 0; i < numChildren; i++) {
+        const session = document.getElementById(`session${i}`)?.value;
+        const childClass = document.getElementById(`childClass${i}`)?.value;
+        const sessionError = document.getElementById(`sessionError${i}`);
+		sessionError.style.display = 'none';
+        // Define your session and class combinations here
+        // Example:
+        if ((childClass === "RR" && session !== "session1") ||
+            (childClass === "RS" && session !== "session1") ||
+            (childClass === "1G" && session !== "session2") ||
+            (childClass === "1K" && session !== "session2") ||
+            (childClass === "2B" && session !== "session2") ||
+            (childClass === "2S" && session !== "session2") ||
+            (childClass === "3J" && session !== "session3") ||
+            (childClass === "3O" && session !== "session3") ||
+            (childClass === "4S" && session !== "session3") ||
+            (childClass === "4W" && session !== "session3") ||
+            (childClass === "5N" && session !== "session4") ||
+            (childClass === "5W" && session !== "session4") ||
+            (childClass === "6F" && session !== "session4") ||
+            (childClass === "6K" && session !== "session4")) {
+            sessionError.style.display = 'block';
+            return; // Exit the function after showing the first error
+        }
+    }
+}
 
 	// Update accompanying adult name when the parent's name field changes
 	document.getElementById('name').addEventListener('input', function() {
@@ -394,6 +484,7 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 	        email: document.getElementById('email').value,
 	        phone: document.getElementById('phone').value,
 	        numChildren: document.getElementById('numChildren').value,
+			payingChildren: document.getElementById('hiddenField').value,
 	        paymentMethod: document.getElementById('paymentMethod').value,
 	        agreeTerms: document.getElementById('terms').checked,
 	        agreeMsg: document.getElementById('msgpermission').checked,
@@ -413,6 +504,7 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
         		});
       		}
       		formData.children = childrenData;
+			formData.totalValue = payingChildren * 4   ///UPDATE HERE WITH PRICE OF DISCO TICKET
 
 	// **Replace with your actual Apps Script Web App URL**
 	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsVPxZvL9ChglarrkN06QAzNsOcT0n5vYRlqZht0CJt5aB1Rpo-Lj3UjHVGoZoaiPu/exec";
