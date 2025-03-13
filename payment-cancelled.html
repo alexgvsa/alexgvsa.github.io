@@ -31,11 +31,12 @@
 		<p><b>Payment <u>must</u> be received in advance of the disco - no payments will be accepted on the door.</b></p>
 		<hr>
 		<p>If you would prefer to pay by bank transfer, please follow these instructions:</p>
-        <p><bImportant!</b>You must quote the following reference on your payment: <b> <span id="paymentRef"></span></b>
-			<div style="line-height: 1.1;">
-				<p><b>Payee name:</b> Golden Valley School Association</p>
-				<p><b>Sort code:</b> 30-96-26</p>
-				<p><b>Account no:</b> 80798360</p>
+        <p><b>Important:</b> You <u>must</u> quote this reference on your payment: <b> <span id="paymentRef"></span></b>
+			<div style="line-height: 1.0;">
+				<p><b>Payee name:</b> Golden Valley School Association<br>
+				<p><b>Sort code:</b> 30-96-26<br>
+				<p><b>Account no:</b> 80798360<br>
+				<p><b>Amount to pay:</b> £<span id="paymentAmount"></span></p>
 </div>
         <p>These instructions have also been sent to you by email.</p>
       </div>
@@ -48,6 +49,11 @@
     if (paymentRef) {
       document.getElementById('paymentRef').textContent = paymentRef;
     }
+	const paymentAmount = urlParams.get('amt');
+    if (paymentAmount) {
+      document.getElementById('paymentAmount').textContent = paymentAmount;
+    }	
+	
   </script>
 </body>
 </html>
