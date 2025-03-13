@@ -81,8 +81,10 @@
 
       <!-- Important Information Section (moved below Your Tickets) -->
       <fieldset>
-        <legend>Important information</legend>
-        <p>In order to make the disco happen, we need each child's parent/carer, or other nominated adult, to remain on site during the course of the disco. We also need parent volunteers to help supervise the event.  If not enough people volunteer to help, unfortunately the disco will need to be cancelled.  Please consider whether you can spare an hour (or more!) to help make this event a success.</p>
+        <legend>Important information - please read</legend>
+        <p>In order to make the disco happen, we need each child's parent/carer, or other nominated adult, to remain on site during the course of the disco. Due to space constraints, only one adult per child can remain.  Each adult may accompany up to four children.</p>
+		
+		<p>We also need parent volunteers to help supervise the event.  If not enough people volunteer to help, unfortunately the disco will need to be cancelled.  Please consider whether you can spare an hour (or more!) to help make this event a success.</p>
         <div class="mb-3">
           <label>
             <input type="checkbox" id="accompany" required> I understand that the named accompanying adult will be required to remain on site for the duration of the disco
@@ -151,12 +153,19 @@
 		childSection.classList.add('child-section');
 		childSection.innerHTML = `
 			<h5>Child ${i + 1}</h5>
+			<p><p/>
+			<div class="form-check">
+				<input type="checkbox" class="form-check-input" id="pp${i}" name="pp${i}">
+				<label class="form-check-label" for="pp${i}">This child receives Pupil Premium - please provide a free disco ticket</label>
+			</div>			
+			<p><p/>
 			<div class="mb-3">
 			<label for="session${i}" class="form-label">Session</label>
 			<select class="form-select" id="session${i}" name="session${i}" required>
-				<option value="session1">Session 1 (Years R/1/2) - 3pm to 4pm</option>
-				<option value="session2">Session 2 (Years 3/4) - 4:30pm to 5:30pm</option>
-				<option value="session3">Session 3 (Years 5/6) - 6pm to 7pm</option>
+				<option value="session1">Session 1 (Reception) - 2pm to 3:15pm</option>
+				<option value="session1">Session 2 (Years 1/2) - 3:30pm to 4:45pm</option>
+				<option value="session2">Session 3 (Years 3/4) - 5pm to 6:15pm</option>
+				<option value="session3">Session 4 (Years 5/6) - 6:30pm to 7:45pm</option>
 			</select>
 			</div>
 			<div class="mb-3">
@@ -191,7 +200,7 @@
 			<textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none"></textarea>
 			</div>
 			<div class="mb-3">
-			<label for="accompanyingAdult${i}" class="form-label">Name of Accompanying Adult</label>
+			<label for="accompanyingAdult${i}" class="form-label">Full name of Accompanying Adult</label>
 			<div class="form-check">
 				<input type="checkbox" class="form-check-input" id="me${i}" name="me${i}">
 				<label class="form-check-label" for="me${i}">Me</label>
@@ -251,34 +260,11 @@ function validateEmail(email) {
     return emailPattern.test(email);
 }
 
-// Function to check emails match and validate format
-function checkEmailValid() {
-    const email = document.getElementById('email').value.trim();
-    const emailFormatError = document.getElementById('emailFormatError');
-    let isValid = true;
-	
-	// If email is blank, skip validation
-    if (email === '') {
-	emailFormatError.style.display = 'none';
-	    return isValid; // Skip the validation
-    }
-
-    // Validate email format
-    if (!validateEmail(email)) {
-        emailFormatError.style.display = 'block';
-        isValid = false;
-    } else {
-        emailFormatError.style.display = 'none';
-    }
-    return isValid;
-}
-
-function checkEmailSame() {
+function checkEmailConfirm() {
     const email = document.getElementById('email').value.trim();
     const emailConfirm = document.getElementById('emailConfirm').value.trim();
     const emailError = document.getElementById('emailConfirmError');
-    const emailFormatError = document.getElementById('emailFormatError');
-
+    
     let isValid = true;
     // Check if emails match
     if (email !== emailConfirm) {
@@ -290,6 +276,52 @@ function checkEmailSame() {
 
     return isValid;
 }
+
+function checkEmail() {
+    const email = document.getElementById('email').value.trim();
+    const emailConfirm = document.getElementById('emailConfirm').value.trim();
+    const emailError = document.getElementById('emailConfirmError');
+    const emailFormatError = document.getElementById('emailFormatError');
+
+	//Turn off the warnings
+	emailError.style.display = 'none';
+	emailFormatError.style.display = 'none';
+
+	let isValid = true
+	
+	// Both boxes are blank. Remove errors and skip further validation
+	if (email === "" && emailConfirm === "") {
+		return isValid
+	}
+
+	// If confirm box is blank, just check that the email is valid
+	if (email !== "" && emailConfirm === "") {
+	
+		if (!validateEmail(email)) {
+			emailFormatError.style.display = 'block';
+			isValid = false;
+			return isValid
+		}
+	}
+
+	//If confirm box is not blank and email is not blank, validate both
+	if (email !== "" && emailConfirm !== "") {
+
+		if (!validateEmail(email)) {
+		emailFormatError.style.display = 'block';
+		isValid = false;
+		}  
+		if (email !== emailConfirm) {
+		emailError.style.display = 'block';
+        isValid = false;
+		}
+		return isValid;
+
+    }
+	
+	return isValid //return true in every other case
+}
+  
 
  // Validate UK phone number (must start with 07, 01, or 02 and contain 11 digits, spaces allowed)
   function validatePhoneNumber(phone) {
@@ -317,25 +349,16 @@ function checkEmailSame() {
     return isValid;
   }
 	  
-	  
-	  
+	  	  
 // Run validation when the user leaves the email and phone fields
-document.getElementById('email').addEventListener('blur', checkEmailValid);
-document.getElementById('emailConfirm').addEventListener('blur', checkEmailSame);
+document.getElementById('email').addEventListener('blur', checkEmail);
+document.getElementById('emailConfirm').addEventListener('blur', checkEmailConfirm);
+document.getElementById('numChildren').addEventListener('blur', checkEmailConfirm);
+document.getElementById("numChildren").addEventListener("change", checkEmailConfirm);
+
 document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 	  
-// Prevent form submission if emails are invalid
-//document.getElementById('discoForm').addEventListener('submit', function(event) {
- //   if (!checkEmailValid()) {
- //       event.preventDefault(); // Stop form submission
- //       alert("Please enter a valid email address and ensure both emails match.");
- //   }
-//	if (!checkEmailSame()) {
-//        event.preventDefault(); // Stop form submission
-//        alert("Please enter a valid email address and ensure both emails match.");
-//    }
-//});
-	  
+  
     // Show appropriate message based on selected payment method
     document.getElementById('paymentMethod').addEventListener('change', function() {
       const paymentMessageElement = document.getElementById('paymentMessage');
@@ -351,24 +374,16 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 
 	// Handle form submission
     function handleFormSubmit(event) {
-   	event.preventDefault();  // Prevent the default form submission
+   	
+	event.preventDefault();  // Prevent the default form submission
 
-	if (!checkEmailValid()) {
-        	event.preventDefault(); // Stop form submission
+	if (!checkEmail() || !checkEmailConfirm() || !checkPhoneNumber()) {
+        event.preventDefault(); // Stop form submission
 		return;
-       		//alert("Please enter a valid email address and ensure both emails match.");
+       	//alert("Please enter a valid email address and ensure both emails match.");
    	}
-	if (!checkEmailSame()) {
-        	event.preventDefault(); // Stop form submission
-		return;
-       		// alert("Please enter a valid email address and ensure both emails match.");
-    	}
-	if (!checkPhoneNumber()) {
-        	event.preventDefault(); // Stop form submission
-      		return;  // Stop form submission if phone number is invalid
-    	}
-
-      	//Disable the submission button to avoid multiple clicks
+		
+      //Disable the submission button to avoid multiple clicks
       	const submitButton = document.querySelector('button[type="submit"]');
       	submitButton.textContent = 'Submitting...';
       	submitButton.disabled = true;
