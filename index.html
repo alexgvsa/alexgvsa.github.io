@@ -209,10 +209,10 @@
 			<label for="session${i}" class="form-label">Session</label>
 			<select class="form-select" id="session${i}" name="session${i}" required>
 				<option value="" disabled selected>Select session</option>
-				<option value="session1">Session 1 (Reception) - 2pm to 3:15pm</option>
-				<option value="session2">Session 2 (Years 1/2) - 3:30pm to 4:45pm</option>
-				<option value="session3">Session 3 (Years 3/4) - 5pm to 6:15pm</option>
-				<option value="session4">Session 4 (Years 5/6) - 6:30pm to 7:45pm</option>
+				<option value="session1">Session 1 (Reception) - 2:30pm to 3:45pm</option>
+				<option value="session2">Session 2 (Years 1/2) - 4pm to 5:15pm</option>
+				<option value="session3">Session 3 (Years 3/4) - 5:30pm to 6:45pm</option>
+				<option value="session4">Session 4 (Years 5/6) - 7pm to 8:15pm</option>
 			</select>
 			</div>
 			<div class="mb-3">
@@ -245,8 +245,12 @@
 			<div id="sessionError${i}" class="text-danger" style="display: none;">Please check you have selected the correct disco session above for this class</div>
 			<p></p>
 			<div class="mb-3">
+			<label for="songRequest${i}" class="form-label">Is there a particular song this child would like to be played at the disco?</label>
+			<input type="text" class="form-control" id="songRequest${i}" name="songRequest${i}">
+			</div>
+   			<div class="mb-3">
 			<label for="allergies${i}" class="form-label">Allergies or Medical Requirements</label>
-			<textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none"></textarea>
+			<textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none. If your child needs medical equipment - e.g. an inhaler - please ensure that the accompanying adult brings this with them to the disco."></textarea>
 			</div>
 			<div class="mb-3">
 			<label for="accompanyingAdult${i}" class="form-label">Full name of Accompanying Adult</label>
@@ -507,7 +511,8 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
           		session: document.getElementById(`session${i}`).value,
           		childName: document.getElementById(`childName${i}`).value,
           		childClass: document.getElementById(`childClass${i}`).value,
-          		allergies: document.getElementById(`allergies${i}`).value,
+          		songRequest: document.getElementById(`songRequest${i}`).value,
+			allergies: document.getElementById(`allergies${i}`).value,
           		accompanyingAdult: document.getElementById(`accompanyingAdult${i}`).value
         		});
       		}
@@ -515,7 +520,7 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 			
 
 	// **Replace with your actual Apps Script Web App URL**
-	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPRlmRi7hwHHz2S-FRMIo09iT4Ai0Rm0CK4ofkhHjksn9iG21716bkvWeLEaJi6bi9/exec";
+	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwk2YeLokEUyBASjy8w85aNnWK97UlXO54UJxwXi6r32x8emVM0aFUvWxQbySkVzFsx/exec";
 
 	// Send the data to the Google Apps Script Web App
 	fetch(APPS_SCRIPT_URL, {
