@@ -184,6 +184,7 @@
 		session: document.getElementById(`session${index}`)?.value || '',
 		childName: document.getElementById(`childName${index}`)?.value || '',
 		childClass: document.getElementById(`childClass${index}`)?.value || '',
+		songRequest: document.getElementById(`songRequest${index}`)?.value || '',
 		allergies: document.getElementById(`allergies${index}`)?.value || '',
 		accompanyingAdult: document.getElementById(`accompanyingAdult${index}`)?.value || '',
 		meChecked: document.getElementById(`me${index}`)?.checked || false,
@@ -269,6 +270,7 @@
 			document.getElementById(`session${i}`).value = previousData[i].session;
 			document.getElementById(`childName${i}`).value = previousData[i].childName;
 			document.getElementById(`childClass${i}`).value = previousData[i].childClass;
+			document.getElementById(`songRequest${i}`).value = previousData[i].songRequest;
 			document.getElementById(`allergies${i}`).value = previousData[i].allergies;
 			document.getElementById(`accompanyingAdult${i}`).value = previousData[i].accompanyingAdult;
 			document.getElementById(`me${i}`).checked = previousData[i].meChecked;
