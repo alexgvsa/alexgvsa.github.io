@@ -26,9 +26,78 @@
       margin-top: 10px;
       font-style: italic;
     }
+	
+	button[type="submit"].btn.btn-primary {
+    background-color: #FFD100; /* Change the background color */
+    border-color: #FFD100; /* Change the border color to match */
+    color: black; /* Change the text color if needed */
+}
+
+button[type="submit"].btn.btn-primary:hover {
+    background-color: #e6c000; /* Darker yellow on hover for better UX */
+    border-color: #e6c000; /* Match hover border color */
+}
+	
+#cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(255, 209, 0, 0.9);
+    color: black;
+    text-align: center;
+    padding: 15px;
+    z-index: 1000;
+    border-radius: 8px;
+    width: 400px; /* Adjust width as needed */
+	font-size: 14px;
+}
+
+
+#accept-cookies {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+	z-index: 1000;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px
+	margin: 5px;
+}
+
+#reject-cookies {
+    background-color: #808080;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+	font-size: 12px
+	margin: 5px;
+}
+
+#close-cookie-banner{
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+	
   </style>
 </head>
 <body>
+
+<div id="cookie-banner" style="display: none;">
+  <span id="close-cookie-banner" style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 20px;">&times;</span>
+	<p></p>
+  <p>We use cookies and similar technologies to improve your browsing experience. We'll assume you're ok with this, but you can opt out if you wish. <a href="https://drive.google.com/file/d/1dhKXo57rXV89gt2lKXh4cn23ya-6wsjw/view?usp=drive_link" style="color: black;" target="_blank">GVSA Privacy Notice</a></p>
+  <div style="margin-top: 15px;">
+    <button id="accept-cookies">Accept</button>
+    <button id="reject-cookies">Reject</button>
+  </div>
+</div>
+
 
   <div class="form-container">
     <h1>GVSA Disco Tickets</h1>
@@ -281,10 +350,51 @@
 	updateHiddenField();
 	});
 
-		// Add event listeners to pupil premium checkboxes
-        document.addEventListener('change', function(event) {
-            if (event.target && event.target.id.startsWith('pp')) {
-                updateHiddenField();
+	// Add event listening to get cookie consent and load any saved data on page load
+	document.addEventListener('DOMContentLoaded', () => {
+		const cookieBanner = document.getElementById('cookie-banner');
+		const acceptCookiesButton = document.getElementById('accept-cookies');
+		const rejectCookiesButton = document.getElementById('reject-cookies'); 
+		const closeCookieBanner = document.getElementById('close-cookie-banner');
+
+		// Check if consent has already been given, and if not, display the banner
+		if (!localStorage.getItem('cookieConsent')) {
+			cookieBanner.style.display = 'block'; // Show the banner
+			localStorage.setItem('cookieConsent', 'true');
+		} else {
+			//Attempt to load any saved data
+			console.log("Attempting to load any saved data") //Load any saved data
+			loadFormData(); 
+			console.log("Clearing any local saved data");
+			clearFormData();  //Delete any locally saved data once deleted
+		}
+		// Handle consent
+		acceptCookiesButton.addEventListener('click', () => {
+			//Record the consent
+			localStorage.setItem('cookieConsent', 'true');
+			//Hide the banner
+			cookieBanner.style.display = 'none'; // Hide the banner
+			});
+			
+		// Handle reject consent
+			rejectCookiesButton.addEventListener('click', () => {
+			localStorage.setItem('cookieConsent', 'false');
+			localStorage.removeItem('discoFormData'); //clear saved form data.
+			cookieBanner.style.display = 'none'; // Hide the banner
+			//alert("Local storage has been disabled. Your form data will not be saved. If you leave this page, or close your browser, you will lose any unsaved information.")
+		});
+		
+		// Handle close button click
+		closeCookieBanner.addEventListener('click', () => {
+		cookieBanner.style.display = 'none'; // Hide the banner
+		});
+		
+	});
+		
+	// Add event listeners to pupil premium checkboxes
+    document.addEventListener('change', function(event) {
+        if (event.target && event.target.id.startsWith('pp')) {
+            updateHiddenField();
             }
         });
 
@@ -295,6 +405,8 @@ document.addEventListener('change', function(event) {
         validateSession();
     }
 });
+
+
 
 function validateSession() {
     const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
@@ -481,16 +593,35 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
    	
 	event.preventDefault();  // Prevent the default form submission
 
+	//Run validation checks on email addresses
 	if (!checkEmail() || !checkEmailConfirm() || !checkPhoneNumber()) {
         event.preventDefault(); // Stop form submission
 		return;
        	//alert("Please enter a valid email address and ensure both emails match.");
    	}
-		
+
+	//Check for any invalid sessions selected
+	
+	 const sessionErrors = document.querySelectorAll('[id^="sessionError"]');
+    for (let error of sessionErrors) {
+        if (error.style.display === 'block') {
+            error.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Scroll to first error
+            return; // Stop form submission
+        }
+    }
+
+
       //Disable the submission button to avoid multiple clicks
       	const submitButton = document.querySelector('button[type="submit"]');
       	submitButton.textContent = 'Submitting...';
       	submitButton.disabled = true;
+
+	//Save the form data for local storage in case an error occurs during submission
+	
+	if (localStorage.getItem('cookieConsent')) {
+	console.log("Saving data to local storage");
+	saveFormData();
+	}
 
     	// Collect form data
     	var formData = {
@@ -522,7 +653,7 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 			
 
 	// **Replace with your actual Apps Script Web App URL**
-	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqAH9YgC0lH-Wod0DE_9kSnWjWBEgIV_Fu3z4ftGXk6chgN5j4USdmI05mrpR_BjdM/exec";
+	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfM1hFHjvZ53uQz06AS1VGLHP5rTt7AKJjN6BYLV2k7D0ZBpFVbhCkXUolLiGLw7an/exec";
 
 	// Send the data to the Google Apps Script Web App
 	fetch(APPS_SCRIPT_URL, {
@@ -534,7 +665,9 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 		})
 	.then(response => response.text()) // or `.json()` if your script returns JSON
 	.then(paymentUrl => {
-    	if (formData.paymentMethod === "card") {
+    	console.log("Clearing saved local data");
+		clearFormData();  //Successful response received from script, can delete locally saved data
+		if (formData.paymentMethod === "card") {
 		window.location.href = paymentUrl; // Redirect for card payments
     	} else {
 		document.body.innerHTML = paymentUrl; // Show bank transfer details
@@ -542,9 +675,79 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 	})
   	.catch(error => {
 		console.error("Error:", error);
-		alert("We're really sorry - an error occurred whilst attempting to submit your form.  The error was " + error + "  Please contact hello@gvsa.org.uk for support.");
+		alert("Sorry, an error occurred whilst attempting to submit your form.  Please check your network connection and try again.  Contact hello@gvsa.org.uk for support if you're still having problems.");
+		submitButton.textContent = 'Submit';
+      	submitButton.disabled = false;
 	});
 	}
+	
+	
+	function saveFormData() {
+    // This function saves the form to local storage
+	console.log("saveFormData function successfully called")
+	const formElements = document.querySelectorAll("#discoForm input, #discoForm select, #discoForm textarea");
+    let formData = {};
+    formElements.forEach(element => {
+        if (element.type === "checkbox") {
+            formData[element.id] = element.checked; // Store checkbox state
+        } else {
+            formData[element.id] = element.value; // Store other inputs
+        }
+    });
+    localStorage.setItem("discoFormData", JSON.stringify(formData));
+	}
+
+	function clearFormData() {
+    localStorage.removeItem("discoFormData");
+	}
+
+	
+	// Function to load saved data from localStorage
+	function loadFormData() {
+    console.log("Attempting to load data from local storage");
+	const savedData = JSON.parse(localStorage.getItem("discoFormData"));
+    if (!savedData) {
+		console.log("No saved local data was found");
+		return;
+	}
+// Restore non-child field values first
+    Object.keys(savedData).forEach(id => {
+        if (!id.startsWith("session") && !id.startsWith("childName") && !id.startsWith("childClass") && !id.startsWith("songRequest") && !id.startsWith("allergies") && !id.startsWith("accompanyingAdult") && !id.startsWith("me") && !id.startsWith("pp")) {
+            const element = document.getElementById(id);
+            if (element) {
+                if (element.type === "checkbox") {
+                    element.checked = savedData[id];
+                } else {
+                    element.value = savedData[id];
+                }
+            }
+        }
+    });
+
+    // Then, trigger the change event to create child fields
+    const numChildrenElement = document.getElementById('numChildren');
+    if (numChildrenElement && savedData['numChildren']) {
+        numChildrenElement.dispatchEvent(new Event('change'));
+
+        // Populate child fields after they are created
+        setTimeout(() => { // Use setTimeout to ensure fields are created
+            Object.keys(savedData).forEach(id => {
+                if (id.startsWith("session") || id.startsWith("childName") || id.startsWith("childClass") || id.startsWith("songRequest") || id.startsWith("allergies") || id.startsWith("accompanyingAdult") || id.startsWith("me") || id.startsWith("pp")) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        if (element.type === "checkbox") {
+                            element.checked = savedData[id];
+                        } else {
+                            element.value = savedData[id];
+                        }
+                    }
+                }
+            });
+        }, 0); // Execute as soon as possible after the event queue is clear
+    }
+	
+	}
+	
   </script>
 
 </body>
