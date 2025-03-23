@@ -5,160 +5,141 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GVSA Disco Tickets</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    
-	
-	#header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 10px 20px;
-    background-color: #fff; /* White background for the header */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
+  <style>	
+	  #header {  /* GVSA Banner Header */
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 20px;
+      background-color: #fff; /* White background for the header */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    #logo {  /* GVSA logo in banner header */
+      height: 50px; /* Adjust the logo size as needed */
+      width: auto;
+    }
+    #business-name {  /* GVSA name in banner header */
+      font-size: 20px; /* Adjust the font size */
+      font-weight: bold;
+      color: #333; /* Adjust text color */
+      margin-left: 10px; /* Space between logo and name */
+      line-height: 1.2; /* Optional: Adjust line spacing between the two lines */
+    }
 
-#logo {
-    height: 50px; /* Adjust the logo size as needed */
-    width: auto;
-}
-
-#business-name {
-    font-size: 20px; /* Adjust the font size */
-    font-weight: bold;
-    color: #333; /* Adjust text color */
-    margin-left: 10px; /* Space between logo and name */
-    line-height: 1.2; /* Optional: Adjust line spacing between the two lines */
-}
-
-@media (max-width: 768px) {
-    #header {
+    @media (max-width: 768px) {
+      #header {  /* GVSA Banner Header on mobile devices */
         padding: 10px;
         justify-content: left;
+      }
+      #logo {  /* GVSA logo in banner header on mobile devices */
+          height: 40px; 
+      }
+      #business-name {  /* GVSA name in banner header on mobile devices */
+          font-size: 18px;
+      }
     }
-
-    #logo {
-        height: 40px; /* Adjust logo size for smaller screens */
-    }
-
-    #business-name {
-        font-size: 18px; /* Adjust font size for mobile screens */
-    }
-}
 	
+	  body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f7fa;
+  	    margin-top: 80px;  /* Margin at top to prevent content falling beneath GVSA banner header */
+        }
+        .form-container {
+          max-width: 800px;
+          margin: 0 auto;
+          background: #fff;
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          }
+        .child-section {
+          margin-bottom: 20px;
+          }
+        .payment-message {
+          margin-top: 10px;
+          font-style: italic;
+        }
 	
-	
-	body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f4f7fa;
-	  margin-top: 80px;
+	  textarea.form-control {  /* Text area used for medical/allergies - has placeholder text, so set minimum height to make placeholder visible without scrolling */
+      min-height: 60px; /* Minimum height for larger screens */
+      resize: vertical; /* Allow user to resize vertically if needed */
+      }
+      @media (max-width: 768px) {
+        textarea.form-control {
+        min-height: 160px; /* Increase height for mobile to fit in whole placeholder as width will be narrower */
+        }
+      }
+    button[type="submit"].btn.btn-primary {
+      background-color: #FFD100; /* Set background colour of submit button */
+      border-color: #FFD100; /* Set the border color to match */
+      color: black; /* Set the font colour on the submit button  */
+      }
+    button[type="submit"].btn.btn-primary:hover {
+      background-color: #e6c000; /* Darker yellow on hover for better UX */
+      border-color: #e6c000; /* Match hover border color */
     }
-    .form-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 30px;
+	
+    #cookie-banner {  /* Styling for the cookie consent banner in the bottom right corner */
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: rgba(255, 209, 0, 0.9);
+      color: black;
+      text-align: center;
+      padding: 15px;
+      z-index: 1000;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .child-section {
-      margin-bottom: 20px;
-    }
-    .payment-message {
-      margin-top: 10px;
-      font-style: italic;
-    }
-	
-	
-	textarea.form-control {
-    min-height: 60px; /* Minimum height for larger screens */
-    resize: vertical; /* Allow user to resize vertically if needed */
-}
-
-/* Apply taller height on mobile devices */
-@media (max-width: 768px) {
-    textarea.form-control {
-        min-height: 160px; /* Increase height for mobile */
-    }
-}
-	
-	
-	
-	button[type="submit"].btn.btn-primary {
-    background-color: #FFD100; /* Change the background color */
-    border-color: #FFD100; /* Change the border color to match */
-    color: black; /* Change the text color if needed */
-}
-
-button[type="submit"].btn.btn-primary:hover {
-    background-color: #e6c000; /* Darker yellow on hover for better UX */
-    border-color: #e6c000; /* Match hover border color */
-}
-	
-#cookie-banner {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: rgba(255, 209, 0, 0.9);
-    color: black;
-    text-align: center;
-    padding: 15px;
-    z-index: 1000;
-    border-radius: 8px;
-    width: 400px; /* Adjust width as needed */
-	font-size: 14px;
-	box-sizing: border-box; 
-}
-
-/* Apply adjustments for mobile screens */
-@media (max-width: 768px) {
-    #cookie-banner {
+      width: 400px; /* Adjust width as needed */
+	    font-size: 14px;
+	    box-sizing: border-box; 
+      }
+    @media (max-width: 768px) {  /* Adjustments to cookie banner for mobile devices */
+      #cookie-banner {
         width: 90%; /* Make the banner take up 90% of the screen width */
         left: 5%; /* Position it in the center with some padding */
         right: auto; /* Remove the right alignment */
+      }
     }
-}
-
-#accept-cookies {
-    background-color: #000000;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-	z-index: 1000;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 12px
-	margin: 5px;
-}
-
-#reject-cookies {
-    background-color: #808080;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-	font-size: 12px
-	margin: 5px;
-}
-
-#close-cookie-banner{
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 20px;
-}
-	
-  </style>
+    /* Formatting of the accept and reject buttons in the cookie banner */
+    #accept-cookies {
+      background-color: #000000;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+	    z-index: 1000;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 12px
+	    margin: 5px;
+    }
+    #reject-cookies {
+      background-color: #808080;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+	    font-size: 12px
+	    margin: 5px;
+    }
+    /* Formatting of the 'X' (close) button in the top right of the cookie banner */
+    #close-cookie-banner{
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+	</style>
 </head>
-<body>
 
+<body>
 <div id="cookie-banner" style="display: none;">
   <span id="close-cookie-banner" style="position: absolute; top: 5px; right: 10px; cursor: pointer; font-size: 20px;">&times;</span>
 	<p></p>
@@ -168,15 +149,13 @@ button[type="submit"].btn.btn-primary:hover {
     <button id="reject-cookies">Reject</button>
   </div>
 </div>
-
 <div id="header" class="d-flex align-items-center">
-  <img src="https://lh4.googleusercontent.com/XbH-ive5K4P2qYjvWCGQgNjzPkWBG5FpgTCn9Qwr2EvxBNO5fRoQlAESr-OvAFFEaKMro6mjNAQDR97a6D_quls=w16383" alt="Logo" id="logo" class="me-2">
+  <img src="http://disco.gvsa.org.uk/GVLogo.png" alt="Logo" id="logo" class="me-2">
   <span id="business-name">Golden Valley<br>School Association</span>
 </div>
   <div class="form-container">
     <h1>GVSA Disco Tickets</h1>
     <p>Please complete the form below to buy your tickets for the GVSA Disco.</p>
-
     <form id="discoForm" onsubmit="handleFormSubmit(event)">
       <!-- Your Details Section -->
       <fieldset>
@@ -200,11 +179,9 @@ button[type="submit"].btn.btn-primary:hover {
           <input type="email" class="form-control" id="emailConfirm" name="emailConfirm" required>
           <!-- Error message will appear here -->
         <div id="emailConfirmError" class="text-danger" style="display: none;">The email addresses do not match.</div>
-	
         </div>
       </fieldset>
-
-      <!-- Your Tickets Section -->
+      <!-- Your Tickets/children information Section -->
       <fieldset>
         <legend>Your tickets</legend>
         <div class="mb-3">
@@ -219,18 +196,13 @@ button[type="submit"].btn.btn-primary:hover {
 			  <input type="hidden" id="hiddenField" name="hiddenField" value="">  <!-- // USE IN PRODUCTION -->
 			 <!--  <input type="text" id="hiddenField" name="hiddenField" value="">  <!-- // USE FOR TESTING -->
         </div>
-
-
         <div id="childrenFields"></div> <!-- Placeholder for dynamic child fields -->
-        
       </fieldset>
-
-      <!-- Important Information Section (moved below Your Tickets) -->
+      <!-- Important Information Section -->
       <fieldset>
         <legend>Important information - please read</legend>
         <p>In order to make the disco happen, we need each child's parent/carer, or other nominated adult, to remain on site during the course of the disco. Due to space constraints, only one adult per child can remain.  Each adult may accompany up to four children.</p>
-		
-		<p>We also need parent volunteers to help supervise the event.  If not enough people volunteer to help, unfortunately the disco will need to be cancelled.  Please consider whether you can spare an hour (or more!) to help make this event a success.</p>
+		    <p>We also need parent volunteers to help supervise the event.  If not enough people volunteer to help, unfortunately the disco will need to be cancelled.  Please consider whether you can spare an hour (or more!) to help make this event a success.</p>
         <div class="mb-3">
           <label>
             <input type="checkbox" id="accompany" required> I understand that the named accompanying adult will be required to remain on site for the duration of the disco
@@ -252,7 +224,6 @@ button[type="submit"].btn.btn-primary:hover {
           </label>
         </div>
       </fieldset>
-
       <!-- Payment Information Section -->
       <fieldset>
         <legend>Payment information</legend>
@@ -272,384 +243,190 @@ button[type="submit"].btn.btn-primary:hover {
     </form>
   </div>
 
-  <script>
-    
-	
-	function updateHiddenField() {
-        const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
-        let pupilPremiumCount = 0;
+  <script>    
 
-        for (let i = 0; i < numChildren; i++) {
-            if (document.getElementById(`pp${i}`) && document.getElementById(`pp${i}`).checked) {
-                pupilPremiumCount++;
-            }
-        }
+    // EVENT LISTENERS
 
-        const payingChildren = numChildren - pupilPremiumCount;
-		document.getElementById('hiddenField').value = payingChildren;
-    
-		const paymentMethodSelect = document.getElementById('paymentMethod');
-		
-		
-		const paymentMessageElement = document.getElementById('paymentMessage');
-        paymentMessageElement.innerHTML = ''; // Clear the payment method message
-		
-		if (payingChildren === 0) {
-			paymentMethodSelect.innerHTML = '<option value="">Payment not required. Please click Submit below.</option>';
-				
-			paymentMethodSelect.disabled = true;
-			
-			const paymentMessageElement = document.getElementById('paymentMessage');
-			paymentMessageElement.innerHTML = ''; // Clear message if no selection
-			
-		} else {
-			
-			paymentMethodSelect.innerHTML = `
-				<option value="" disabled selected>Select payment method</option>
-				<option value="card">Pay by card</option>
-				<option value="bank">Pay by bank transfer</option>
-			`;
-			paymentMethodSelect.disabled = false;
-		}
-
-	}
-	
-	
-	// Handle dynamic fields for children
-	document.getElementById('numChildren').addEventListener('change', function() {
-	const numChildren = this.value;
-	const childrenFieldsContainer = document.getElementById('childrenFields');
-
-	// Store previously entered values
-	let previousData = {};
-	document.querySelectorAll('.child-section').forEach((section, index) => {
-		previousData[index] = {
-		session: document.getElementById(`session${index}`)?.value || '',
-		childName: document.getElementById(`childName${index}`)?.value || '',
-		childClass: document.getElementById(`childClass${index}`)?.value || '',
-		songRequest: document.getElementById(`songRequest${index}`)?.value || '',
-		allergies: document.getElementById(`allergies${index}`)?.value || '',
-		accompanyingAdult: document.getElementById(`accompanyingAdult${index}`)?.value || '',
-		meChecked: document.getElementById(`me${index}`)?.checked || false,
-		ppChecked: document.getElementById(`pp${index}`)?.checked || false
-		};
-	});
-
-	childrenFieldsContainer.innerHTML = ''; // Clear previous child fields
-
-	if (numChildren) {
-		for (let i = 0; i < numChildren; i++) {
-		const childSection = document.createElement('div');
-		childSection.classList.add('child-section');
-		childSection.innerHTML = `
-			<h5>Child ${i + 1}</h5>
-			<p><p/>
-			<div class="form-check">
-				<input type="checkbox" class="form-check-input" id="pp${i}" name="pp${i}">
-				<label class="form-check-label" for="pp${i}">This child receives Pupil Premium - please provide a free disco ticket</label>
-			</div>			
-			<p><p/>
-			<div class="mb-3">
-			<label for="session${i}" class="form-label">Session</label>
-			<select class="form-select" id="session${i}" name="session${i}" required>
-				<option value="" disabled selected>Select session</option>
-				<option value="session1">Session 1 (Reception) - 2:30pm to 3:45pm</option>
-				<option value="session2">Session 2 (Years 1/2) - 4pm to 5:15pm</option>
-				<option value="session3">Session 3 (Years 3/4) - 5:30pm to 6:45pm</option>
-				<option value="session4">Session 4 (Years 5/6) - 7pm to 8:15pm</option>
-			</select>
-			</div>
-			<div class="mb-3">
-			<label for="childName${i}" class="form-label">Child's Full Name</label>
-			<input type="text" class="form-control" id="childName${i}" name="childName${i}" required>
-			</div>
-			<div class="mb-3">
-			<label for="childClass${i}" class="form-label">Child's Class</label>
-			  
-   			<!-- <input type="text" class="form-control" id="childClass${i}" name="childClass${i}" required> -->
-			<!-- Above line used when class was a text box. Replaced with dropdown below.-->
-			<select class="form-select" id="childClass${i}" name="childClass${i}" required>
-            		<option value="" disabled selected>Select Class</option>
-            		<option value="RR">YR Robin</option>
-	       			<option value="RS">YR Sparrow</option>
-            		<option value="1G">Y1 Goldfinch</option>
-	       			<option value="1K">Y1 Kingfisher</option>
-            		<option value="2B">Y2 Blackbird</option>
-	       			<option value="2S">Y2 Swallow</option>
-            		<option value="3J">Y3 Jay</option>
-	       			<option value="3O">Y3 Owl</option>
-            		<option value="4S">Y4 Swift</option>
-	       			<option value="4W">Y4 Wagtail</option>
+	  // Add event listener to handle dynamic fields for children
+	  document.getElementById('numChildren').addEventListener('change', function() {
+    	const numChildren = this.value;
+    	const childrenFieldsContainer = document.getElementById('childrenFields');
+      // Store previously entered values
+	    let previousData = {};
+	    document.querySelectorAll('.child-section').forEach((section, index) => {
+  		  previousData[index] = {
+		    session: document.getElementById(`session${index}`)?.value || '',
+		    childName: document.getElementById(`childName${index}`)?.value || '',
+		    childClass: document.getElementById(`childClass${index}`)?.value || '',
+		    songRequest: document.getElementById(`songRequest${index}`)?.value || '',
+		    allergies: document.getElementById(`allergies${index}`)?.value || '',
+		    accompanyingAdult: document.getElementById(`accompanyingAdult${index}`)?.value || '',
+		    meChecked: document.getElementById(`me${index}`)?.checked || false,
+		    ppChecked: document.getElementById(`pp${index}`)?.checked || false
+		    };
+  	  });
+      childrenFieldsContainer.innerHTML = ''; // Clear previous child fields
+	    if (numChildren) {
+    		for (let i = 0; i < numChildren; i++) {
+		    const childSection = document.createElement('div');
+		    childSection.classList.add('child-section');
+		    childSection.innerHTML = `
+    			<h5>Child ${i + 1}</h5>
+			    <p><p/>
+			    <div class="form-check">
+    				<input type="checkbox" class="form-check-input" id="pp${i}" name="pp${i}">
+				    <label class="form-check-label" for="pp${i}">This child receives Pupil Premium - please provide a free disco ticket</label>
+			    </div>			
+			    <p><p/>
+			    <div class="mb-3">
+  			    <label for="session${i}" class="form-label">Session</label>
+			      <select class="form-select" id="session${i}" name="session${i}" required>
+      				<option value="" disabled selected>Select session</option>
+				      <option value="session1">Session 1 (Reception) - 2:30pm to 3:45pm</option>
+				      <option value="session2">Session 2 (Years 1/2) - 4pm to 5:15pm</option>
+				      <option value="session3">Session 3 (Years 3/4) - 5:30pm to 6:45pm</option>
+				      <option value="session4">Session 4 (Years 5/6) - 7pm to 8:15pm</option>
+			      </select>
+			    </div>
+			    <div class="mb-3">
+  			    <label for="childName${i}" class="form-label">Child's Full Name</label>
+			      <input type="text" class="form-control" id="childName${i}" name="childName${i}" required>
+			    </div>
+			    <div class="mb-3">
+  			    <label for="childClass${i}" class="form-label">Child's Class</label>
+			      <select class="form-select" id="childClass${i}" name="childClass${i}" required>
+              <option value="" disabled selected>Select Class</option>
+              <option value="RR">YR Robin</option>
+	       	    <option value="RS">YR Sparrow</option>
+              <option value="1G">Y1 Goldfinch</option>
+	       	    <option value="1K">Y1 Kingfisher</option>
+              <option value="2B">Y2 Blackbird</option>
+	       	    <option value="2S">Y2 Swallow</option>
+              <option value="3J">Y3 Jay</option>
+	       	    <option value="3O">Y3 Owl</option>
+              <option value="4S">Y4 Swift</option>
+	       	    <option value="4W">Y4 Wagtail</option>
 			        <option value="5N">Y5 Nightingale</option>
-	       			<option value="5W">Y5 Woodpecker</option>
-            		<option value="6F">Y6 Falcon</option>
-	       			<option value="6K">Y6 Kestrel</option>
-        		</select>
-   			</div>
-			<div id="sessionError${i}" class="text-danger" style="display: none;">Please check you have selected the correct disco session above for this class</div>
-			<p></p>
-			<div class="mb-3">
-			<label for="songRequest${i}" class="form-label">Is there a particular song this child would like to be played at the disco?</label>
-			<input type="text" class="form-control" id="songRequest${i}" name="songRequest${i}">
-			</div>
-   			<div class="mb-3">
-			<label for="allergies${i}" class="form-label">Allergies or Medical Requirements</label>
-			<textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none. If your child needs medication or a medical device - e.g. an inhaler or epi-pen - please ensure that the accompanying adult brings this with them to the disco."></textarea>
-			</div>
-			<div class="mb-3">
-			<label for="accompanyingAdult${i}" class="form-label">Full name of Accompanying Adult</label>
-			<div class="form-check">
-				<input type="checkbox" class="form-check-input" id="me${i}" name="me${i}">
-				<label class="form-check-label" for="me${i}">Me</label>
-			</div>
-			<input type="text" class="form-control" id="accompanyingAdult${i}" name="accompanyingAdult${i}" required>
-			</div>
-			<hr>
-			`;
-		childrenFieldsContainer.appendChild(childSection);
+	       	    <option value="5W">Y5 Woodpecker</option>
+              <option value="6F">Y6 Falcon</option>
+	       	    <option value="6K">Y6 Kestrel</option>
+            </select>
+   			  </div>
+			    <div id="sessionError${i}" class="text-danger" style="display: none;">Please check you have selected the correct disco session above for this class</div>
+			    <p></p>
+			    <div class="mb-3">
+  			    <label for="songRequest${i}" class="form-label">Is there a particular song this child would like to be played at the disco?</label>
+			      <input type="text" class="form-control" id="songRequest${i}" name="songRequest${i}">
+			    </div>
+   			  <div class="mb-3">
+  			    <label for="allergies${i}" class="form-label">Allergies or Medical Requirements</label>
+			      <textarea class="form-control" id="allergies${i}" name="allergies${i}" placeholder="Enter details or leave blank if none. If your child needs medication or a medical device - e.g. an inhaler or epi-pen - please ensure that the accompanying adult brings this with them to the disco."></textarea>
+			    </div>
+			    <div class="mb-3">
+  			    <label for="accompanyingAdult${i}" class="form-label">Full name of Accompanying Adult</label>
+			      <div class="form-check">
+  				    <input type="checkbox" class="form-check-input" id="me${i}" name="me${i}">
+				      <label class="form-check-label" for="me${i}">Me</label>
+			      </div>
+			      <input type="text" class="form-control" id="accompanyingAdult${i}" name="accompanyingAdult${i}" required>
+			    </div>
+			  <hr>
+			  `;
+		  childrenFieldsContainer.appendChild(childSection);
+		  // Restore previous values if they exist
+		  if (previousData[i]) {
+  			document.getElementById(`session${i}`).value = previousData[i].session;
+			  document.getElementById(`childName${i}`).value = previousData[i].childName;
+			  document.getElementById(`childClass${i}`).value = previousData[i].childClass;
+			  document.getElementById(`songRequest${i}`).value = previousData[i].songRequest;
+			  document.getElementById(`allergies${i}`).value = previousData[i].allergies;
+			  document.getElementById(`accompanyingAdult${i}`).value = previousData[i].accompanyingAdult;
+			  document.getElementById(`me${i}`).checked = previousData[i].meChecked;
+			  document.getElementById(`pp${i}`).checked = previousData[i].ppChecked;
+			  }
+		  }
+	    }
+	    updateHiddenField();
+	  });
 
-		// Restore previous values if they exist
-		if (previousData[i]) {
-			document.getElementById(`session${i}`).value = previousData[i].session;
-			document.getElementById(`childName${i}`).value = previousData[i].childName;
-			document.getElementById(`childClass${i}`).value = previousData[i].childClass;
-			document.getElementById(`songRequest${i}`).value = previousData[i].songRequest;
-			document.getElementById(`allergies${i}`).value = previousData[i].allergies;
-			document.getElementById(`accompanyingAdult${i}`).value = previousData[i].accompanyingAdult;
-			document.getElementById(`me${i}`).checked = previousData[i].meChecked;
-			document.getElementById(`pp${i}`).checked = previousData[i].ppChecked;
-			}
-		}
-	}
-	updateHiddenField();
-	});
-
-	// Add event listening to get cookie consent and load any saved data on page load
-	document.addEventListener('DOMContentLoaded', () => {
-		const cookieBanner = document.getElementById('cookie-banner');
-		const acceptCookiesButton = document.getElementById('accept-cookies');
-		const rejectCookiesButton = document.getElementById('reject-cookies'); 
-		const closeCookieBanner = document.getElementById('close-cookie-banner');
-
-		// Check if consent has already been given, and if not, display the banner
-		if (!localStorage.getItem('cookieConsent')) {
-			cookieBanner.style.display = 'block'; // Show the banner
-			localStorage.setItem('cookieConsent', 'true');
-		} else {
-			//Attempt to load any saved data
-			console.log("Attempting to load any saved data") //Load any saved data
-			loadFormData(); 
-			console.log("Clearing any local saved data");
-			clearFormData();  //Delete any locally saved data once deleted
-		}
-		// Handle consent
-		acceptCookiesButton.addEventListener('click', () => {
-			//Record the consent
-			localStorage.setItem('cookieConsent', 'true');
-			//Hide the banner
-			cookieBanner.style.display = 'none'; // Hide the banner
-			});
-			
-		// Handle reject consent
-			rejectCookiesButton.addEventListener('click', () => {
-			localStorage.setItem('cookieConsent', 'false');
-			localStorage.removeItem('discoFormData'); //clear saved form data.
-			cookieBanner.style.display = 'none'; // Hide the banner
-			//alert("Local storage has been disabled. Your form data will not be saved. If you leave this page, or close your browser, you will lose any unsaved information.")
-		});
-		
-		// Handle close button click
-		closeCookieBanner.addEventListener('click', () => {
-		cookieBanner.style.display = 'none'; // Hide the banner
-		});
-		
-	});
-		
-	// Add event listeners to pupil premium checkboxes
-    document.addEventListener('change', function(event) {
-        if (event.target && event.target.id.startsWith('pp')) {
-            updateHiddenField();
-            }
-        });
-
-
-// Add event listener to session and childClass dropdowns
-document.addEventListener('change', function(event) {
-    if (event.target && (event.target.id.startsWith('session') || event.target.id.startsWith('childClass'))) {
-        validateSession();
-    }
-});
-
-
-
-function validateSession() {
-    const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
-	let isValid = true;  // Flag to track if the form is valid
-    for (let i = 0; i < numChildren; i++) {
-        const session = document.getElementById(`session${i}`)?.value;
-        const childClass = document.getElementById(`childClass${i}`)?.value;
-        const sessionError = document.getElementById(`sessionError${i}`);
-		sessionError.style.display = 'none';
-        
-		// Define your session and class combinations here
-        // Example:
-        if ((childClass === "RR" && session !== "session1") ||
-            (childClass === "RS" && session !== "session1") ||
-            (childClass === "1G" && session !== "session2") ||
-            (childClass === "1K" && session !== "session2") ||
-            (childClass === "2B" && session !== "session2") ||
-            (childClass === "2S" && session !== "session2") ||
-            (childClass === "3J" && session !== "session3") ||
-            (childClass === "3O" && session !== "session3") ||
-            (childClass === "4S" && session !== "session3") ||
-            (childClass === "4W" && session !== "session3") ||
-            (childClass === "5N" && session !== "session4") ||
-            (childClass === "5W" && session !== "session4") ||
-            (childClass === "6F" && session !== "session4") ||
-            (childClass === "6K" && session !== "session4")) {
-            sessionError.style.display = 'block';
-            isValid = false;
-        }
-    }
-	return isValid;
-}
-
-	// Update accompanying adult name when the parent's name field changes
-	document.getElementById('name').addEventListener('input', function() {
-    	document.querySelectorAll('[id^="me"]').forEach(checkbox => {
-	        const index = checkbox.id.replace('me', '');  
-	        const accompanyingAdultInput = document.getElementById(`accompanyingAdult${index}`);
-	
-	        if (checkbox.checked) {
-            	accompanyingAdultInput.value = this.value;  // Update with the parent's name
-        	}
-    		});
-	});
-	  
-	// Handle the "Me" checkbox interaction for each child
-	document.addEventListener('change', function(event) {
-	if (event.target && event.target.id.startsWith('me')) {
-		const childIndex = event.target.id.replace('me', '');  // Extract index from ID
-		const accompanyingAdultInput = document.getElementById(`accompanyingAdult${childIndex}`);
-		const nameField = document.getElementById('name'); // Parent's name field
-		if (event.target.checked) {
-			// If "Me" is checked, set the accompanying adult's name to the parent's name and disable the field
-			accompanyingAdultInput.value = nameField.value;
-			accompanyingAdultInput.disabled = true;
-		} else {
-			// If "Me" is unchecked, clear the field and enable it again
-			accompanyingAdultInput.value = '';
-			accompanyingAdultInput.disabled = false;
-		}
-		}
-	});
-
-function validateEmail(email) {
-    // Regular expression for validating email format
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(email);
-}
-
-function checkEmailConfirm() {
-    const email = document.getElementById('email').value.trim();
-    const emailConfirm = document.getElementById('emailConfirm').value.trim();
-    const emailError = document.getElementById('emailConfirmError');
+  	// Add event listener to get cookie consent and load any saved data on page load
+  	document.addEventListener('DOMContentLoaded', () => {
+		  const cookieBanner = document.getElementById('cookie-banner');
+		  const acceptCookiesButton = document.getElementById('accept-cookies');
+		  const rejectCookiesButton = document.getElementById('reject-cookies'); 
+		  const closeCookieBanner = document.getElementById('close-cookie-banner');
+		  // Check if consent has already been given, and if not, display the banner
+		  if (!localStorage.getItem('cookieConsent')) {
+  			cookieBanner.style.display = 'block'; // Show the banner
+			  localStorage.setItem('cookieConsent', 'true');
+		  } else {
+  			loadFormData();  //Attempt to load any saved data
+			  clearFormData();  //Delete any locally saved data once loaded
+		  }
+		  // Handle consent
+		  acceptCookiesButton.addEventListener('click', () => {
+  			//Record the consent
+			  localStorage.setItem('cookieConsent', 'true');
+			  //Hide the banner
+			  cookieBanner.style.display = 'none'; // Hide the banner
+			  });
+		  // Handle reject consent
+  			rejectCookiesButton.addEventListener('click', () => {
+			  localStorage.setItem('cookieConsent', 'false');
+			  localStorage.removeItem('discoFormData'); //clear saved form data.
+			  cookieBanner.style.display = 'none'; // Hide the banner
+			  //alert("Local storage has been disabled. Your form data will not be saved. If you leave this page, or close your browser, you will lose any unsaved information.")
+		  });
+		  // Handle close button click
+		  closeCookieBanner.addEventListener('click', () => {
+		  cookieBanner.style.display = 'none'; // Hide the banner
+		  });
+	  });
     
-    let isValid = true;
-    // Check if emails match
-    if (email !== emailConfirm) {
-        emailError.style.display = 'block';
-        isValid = false;
-    } else {
-        emailError.style.display = 'none';
-    }
+	  // Add event listeners to pupil premium checkboxes
+    document.addEventListener('change', function(event) {
+      if (event.target && event.target.id.startsWith('pp')) {
+        updateHiddenField();
+        }
+    });
 
-    return isValid;
-}
+    // Add event listeners to session and childClass dropdowns
+    document.addEventListener('change', function(event) {
+      if (event.target && (event.target.id.startsWith('session') || event.target.id.startsWith('childClass'))) {
+        validateSession();
+      }
+    });
 
-function checkEmail() {
-    const email = document.getElementById('email').value.trim();
-    const emailConfirm = document.getElementById('emailConfirm').value.trim();
-    const emailError = document.getElementById('emailConfirmError');
-    const emailFormatError = document.getElementById('emailFormatError');
-
-	//Turn off the warnings
-	emailError.style.display = 'none';
-	emailFormatError.style.display = 'none';
-
-	let isValid = true
-	
-	// Both boxes are blank. Remove errors and skip further validation
-	if (email === "" && emailConfirm === "") {
-		return isValid
-	}
-
-	// If confirm box is blank, just check that the email is valid
-	if (email !== "" && emailConfirm === "") {
-	
-		if (!validateEmail(email)) {
-			emailFormatError.style.display = 'block';
-			isValid = false;
-			return isValid
-		}
-	}
-
-	//If confirm box is not blank and email is not blank, validate both
-	if (email !== "" && emailConfirm !== "") {
-
-		if (!validateEmail(email)) {
-		emailFormatError.style.display = 'block';
-		isValid = false;
-		}  
-		if (email !== emailConfirm) {
-		emailError.style.display = 'block';
-        isValid = false;
-		}
-		return isValid;
-
-    }
-	
-	return isValid //return true in every other case
-}
-  
-
- // Validate UK phone number (must start with 07, 01, or 02 and contain 11 digits, spaces allowed)
-  function validatePhoneNumber(phone) {
-    // Remove spaces to count only digits
-    const cleanedPhone = phone.replace(/\s+/g, '');
-    // Regex to check if phone starts with 07, 01, or 02 and has exactly 11 digits
-    const phonePattern = /^(07|01|02)\d{9}$/;
-    return phonePattern.test(cleanedPhone);
-  }
-
-  // Function to check phone number format
-  function checkPhoneNumber() {
-    const phone = document.getElementById('phone').value.trim();
-    const phoneError = document.getElementById('phoneError');
-
-    let isValid = true;
-    // Check if phone number matches the valid pattern
-    if (!validatePhoneNumber(phone)) {
-      phoneError.style.display = 'block';
-      isValid = false;
-    } else {
-      phoneError.style.display = 'none';
-    }
-
-    return isValid;
-  }
+    // Add event listener to update accompanying adult name when the parent's name field changes
+	  document.getElementById('name').addEventListener('input', function() {
+    	document.querySelectorAll('[id^="me"]').forEach(checkbox => {
+	      const index = checkbox.id.replace('me', '');  
+	      const accompanyingAdultInput = document.getElementById(`accompanyingAdult${index}`);
+	      if (checkbox.checked) {
+          accompanyingAdultInput.value = this.value;  // Update with the parent's name
+        }
+    	});
+	  });
 	  
-	  	  
-// Run validation when the user leaves the email and phone fields
-document.getElementById('email').addEventListener('blur', checkEmail);
-document.getElementById('emailConfirm').addEventListener('blur', checkEmailConfirm);
-document.getElementById('numChildren').addEventListener('blur', checkEmailConfirm);
-document.getElementById("numChildren").addEventListener("change", checkEmailConfirm);
+	  // Add event listener to handle the "Me" checkbox interaction for each child
+	  document.addEventListener('change', function(event) {
+	    if (event.target && event.target.id.startsWith('me')) {
+		    const childIndex = event.target.id.replace('me', '');  // Extract index from ID
+		    const accompanyingAdultInput = document.getElementById(`accompanyingAdult${childIndex}`);
+		    const nameField = document.getElementById('name'); // Parent's name field
+		    if (event.target.checked) {
+			    // If "Me" is checked, set the accompanying adult's name to the parent's name and disable the field
+			    accompanyingAdultInput.value = nameField.value;
+			    accompanyingAdultInput.disabled = true;
+		    } else {
+			    // If "Me" is unchecked, clear the field and enable it again
+			    accompanyingAdultInput.value = '';
+			    accompanyingAdultInput.disabled = false;
+		    }
+		  }
+	  });
 
-document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
-	  
-  
-    // Show appropriate message based on selected payment method
+    // Add event listener to show appropriate payment message based on selected payment method
     document.getElementById('paymentMethod').addEventListener('change', function() {
       const paymentMessageElement = document.getElementById('paymentMessage');
       const selectedPaymentMethod = this.value;
@@ -662,104 +439,137 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
       }
     });
 
-	// Handle form submission
-    function handleFormSubmit(event) {
-   	
-	event.preventDefault();  // Prevent the default form submission
+  //VALIDATION
 
-	//Run validation checks on email addresses
-	if (!checkEmail() || !checkEmailConfirm() || !checkPhoneNumber()) {
-        event.preventDefault(); // Stop form submission
-		return;
-       	//alert("Please enter a valid email address and ensure both emails match.");
-   	}
+  // Add event listeners to run validation checks when the user leaves the email and phone fields
+  document.getElementById('email').addEventListener('blur', checkEmail);
+  document.getElementById('emailConfirm').addEventListener('blur', checkEmailConfirm);
+  document.getElementById('numChildren').addEventListener('blur', checkEmailConfirm);
+  document.getElementById("numChildren").addEventListener("change", checkEmailConfirm);
+  document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 
-	//Check for any invalid sessions selected
-	
-	 const sessionErrors = document.querySelectorAll('[id^="sessionError"]');
-    for (let error of sessionErrors) {
-        if (error.style.display === 'block') {
-            error.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Scroll to first error
-            return; // Stop form submission
+  //Validation of selected combination of session and class
+  function validateSession() {
+    const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
+	  let isValid = true;  // Flag to track if the form is valid
+    for (let i = 0; i < numChildren; i++) {
+      const session = document.getElementById(`session${i}`)?.value;
+      const childClass = document.getElementById(`childClass${i}`)?.value;
+      const sessionError = document.getElementById(`sessionError${i}`);
+		  sessionError.style.display = 'none';
+		  // Define your session and class combinations here
+        if ((childClass === "RR" && session !== "session1") ||
+          (childClass === "RS" && session !== "session1") ||
+          (childClass === "1G" && session !== "session2") ||
+          (childClass === "1K" && session !== "session2") ||
+          (childClass === "2B" && session !== "session2") ||
+          (childClass === "2S" && session !== "session2") ||
+          (childClass === "3J" && session !== "session3") ||
+          (childClass === "3O" && session !== "session3") ||
+          (childClass === "4S" && session !== "session3") ||
+          (childClass === "4W" && session !== "session3") ||
+          (childClass === "5N" && session !== "session4") ||
+          (childClass === "5W" && session !== "session4") ||
+          (childClass === "6F" && session !== "session4") ||
+          (childClass === "6K" && session !== "session4")) {
+          sessionError.style.display = 'block';
+          isValid = false;
         }
+      }
+	  return isValid;
+  }
+
+  //Validate email addresses
+  function validateEmail(email) {
+    // Regular expression for validating email format
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(email);
+  }
+
+  //Validate double-entry of email addresses
+  function checkEmailConfirm() {
+    const email = document.getElementById('email').value.trim();
+    const emailConfirm = document.getElementById('emailConfirm').value.trim();
+    const emailError = document.getElementById('emailConfirmError');
+    let isValid = true;
+    if (email !== emailConfirm) {  // Check if emails match
+        emailError.style.display = 'block';
+        isValid = false;
+    } else {
+        emailError.style.display = 'none';
+    }
+    return isValid;
+  }
+
+  //Email validater
+  function checkEmail() {
+    const email = document.getElementById('email').value.trim();
+    const emailConfirm = document.getElementById('emailConfirm').value.trim();
+    const emailError = document.getElementById('emailConfirmError');
+    const emailFormatError = document.getElementById('emailFormatError');
+	  //Turn off the warnings
+	  emailError.style.display = 'none';
+	  emailFormatError.style.display = 'none';
+	  let isValid = true
+	  // Both boxes are blank. Remove errors and skip further validation
+	  if (email === "" && emailConfirm === "") {
+  		return isValid
+  	}
+	  // If confirm box is blank, just check that the email is valid
+	  if (email !== "" && emailConfirm === "") {	
+		  if (!validateEmail(email)) {
+  			emailFormatError.style.display = 'block';
+			  isValid = false;
+			  return isValid
+		  }
+	  }
+	  //If confirm box is not blank and email is not blank, validate both
+	  if (email !== "" && emailConfirm !== "") {
+		  if (!validateEmail(email)) {
+		    emailFormatError.style.display = 'block';
+		    isValid = false;
+		  }  
+		  if (email !== emailConfirm) {
+		    emailError.style.display = 'block';
+        isValid = false;
+		  }
+		  return isValid;
+    }
+	return isValid //return true in every other case
+  }
+
+  // Validate UK phone number (must start with 07, 01, or 02 and contain 11 digits, spaces allowed)
+  function validatePhoneNumber(phone) {    
+    //If phone number is blank, don't bother performing validation
+    if (!phone) {
+  		phoneError.style.display = 'none';
+		  return true;	
+	  }
+	  const cleanedPhone = phone.replace(/\s+/g, '');  // Remove spaces to count only digits
+    const phonePattern = /^(07|01|02)\d{9}$/;  // Regex to check if phone starts with 07, 01, or 02 and has exactly 11 digits
+    return phonePattern.test(cleanedPhone);
     }
 
+  // Function to check phone number format
+  function checkPhoneNumber() {
+    const phone = document.getElementById('phone').value.trim();
+    const phoneError = document.getElementById('phoneError');
+    let isValid = true;
+    // Check if phone number matches the valid pattern
+    if (!validatePhoneNumber(phone)) {
+      phoneError.style.display = 'block';
+      isValid = false;
+    } else {
+      phoneError.style.display = 'none';
+    }
+    return isValid;
+  }
+	  	  
+  // OTHER HELPER FUNCTIONS
 
-      //Disable the submission button to avoid multiple clicks
-      	const submitButton = document.querySelector('button[type="submit"]');
-      	submitButton.textContent = 'Submitting...';
-      	submitButton.disabled = true;
-
-	//Save the form data for local storage in case an error occurs during submission
-	
-	if (localStorage.getItem('cookieConsent')) {
-	console.log("Saving data to local storage");
-	saveFormData();
-	}
-
-    	// Collect form data
-    	var formData = {
-	        name: document.getElementById('name').value,
-	        email: document.getElementById('email').value,
-	        phone: document.getElementById('phone').value,
-	        numChildren: document.getElementById('numChildren').value,
-			payingChildren: document.getElementById('hiddenField').value,
-	        paymentMethod: document.getElementById('paymentMethod').value,
-	        agreeTerms: document.getElementById('terms').checked,
-	        agreeMsg: document.getElementById('msgpermission').checked,
-	        agreeStay: document.getElementById('accompany').checked,
-	        willVolunteer: document.getElementById('volunteer').checked,
-		};
-
-		// Collect children data
-		var childrenData = [];
-		for (let i = 0; i < formData.numChildren; i++) {
-	  		childrenData.push({
-          		session: document.getElementById(`session${i}`).value,
-          		childName: document.getElementById(`childName${i}`).value,
-          		childClass: document.getElementById(`childClass${i}`).value,
-          		songRequest: document.getElementById(`songRequest${i}`).value,
-			allergies: document.getElementById(`allergies${i}`).value,
-          		accompanyingAdult: document.getElementById(`accompanyingAdult${i}`).value
-        		});
-      		}
-      		formData.children = childrenData;
-			
-
-	// **Replace with your actual Apps Script Web App URL**
-	const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfM1hFHjvZ53uQz06AS1VGLHP5rTt7AKJjN6BYLV2k7D0ZBpFVbhCkXUolLiGLw7an/exec";
-
-	// Send the data to the Google Apps Script Web App
-	fetch(APPS_SCRIPT_URL, {
-		redirect: "follow",
-		method: "POST",
-		mode: "cors",
-		headers: { "Content-Type": "text/plain;charset=utf-8" },
-		body: JSON.stringify(formData),
-		})
-	.then(response => response.text()) // or `.json()` if your script returns JSON
-	.then(paymentUrl => {
-    	console.log("Clearing saved local data");
-		clearFormData();  //Successful response received from script, can delete locally saved data
-		if (formData.paymentMethod === "card") {
-		window.location.href = paymentUrl; // Redirect for card payments
-    	} else {
-		document.body.innerHTML = paymentUrl; // Show bank transfer details
-    	}
-	})
-  	.catch(error => {
-		console.error("Error:", error);
-		alert("Sorry, an error occurred whilst attempting to submit your form.  Please check your network connection and try again.  Contact hello@gvsa.org.uk for support if you're still having problems.");
-		submitButton.textContent = 'Submit';
-      	submitButton.disabled = false;
-	});
-	}
-	
-	
-	function saveFormData() {
+  function saveFormData() {
     // This function saves the form to local storage
-	console.log("saveFormData function successfully called")
-	const formElements = document.querySelectorAll("#discoForm input, #discoForm select, #discoForm textarea");
+	  const formElements = document.querySelectorAll("#discoForm input, #discoForm select, #discoForm textarea");
     let formData = {};
     formElements.forEach(element => {
         if (element.type === "checkbox") {
@@ -772,37 +582,33 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
 	}
 
 	function clearFormData() {
+    // This function deletes any form data previously saved to local storage
     localStorage.removeItem("discoFormData");
 	}
 
-	
-	// Function to load saved data from localStorage
 	function loadFormData() {
-    console.log("Attempting to load data from local storage");
-	const savedData = JSON.parse(localStorage.getItem("discoFormData"));
+    // This function loads any saved data from localStorage
+	  const savedData = JSON.parse(localStorage.getItem("discoFormData"));
     if (!savedData) {
-		console.log("No saved local data was found");
-		return;
-	}
-// Restore non-child field values first
+		  return;
+	  }
+    // Restore non-child field values first
     Object.keys(savedData).forEach(id => {
-        if (!id.startsWith("session") && !id.startsWith("childName") && !id.startsWith("childClass") && !id.startsWith("songRequest") && !id.startsWith("allergies") && !id.startsWith("accompanyingAdult") && !id.startsWith("me") && !id.startsWith("pp")) {
-            const element = document.getElementById(id);
-            if (element) {
-                if (element.type === "checkbox") {
-                    element.checked = savedData[id];
-                } else {
-                    element.value = savedData[id];
-                }
-            }
+      if (!id.startsWith("session") && !id.startsWith("childName") && !id.startsWith("childClass") && !id.startsWith("songRequest") && !id.startsWith("allergies") && !id.startsWith("accompanyingAdult") && !id.startsWith("me") && !id.startsWith("pp")) {
+        const element = document.getElementById(id);
+        if (element) {
+          if (element.type === "checkbox") {
+            element.checked = savedData[id];
+          } else {
+            element.value = savedData[id];
+          }
         }
+      }
     });
-
     // Then, trigger the change event to create child fields
     const numChildrenElement = document.getElementById('numChildren');
     if (numChildrenElement && savedData['numChildren']) {
         numChildrenElement.dispatchEvent(new Event('change'));
-
         // Populate child fields after they are created
         setTimeout(() => { // Use setTimeout to ensure fields are created
             Object.keys(savedData).forEach(id => {
@@ -818,11 +624,120 @@ document.getElementById('phone').addEventListener('blur', checkPhoneNumber);
                 }
             });
         }, 0); // Execute as soon as possible after the event queue is clear
+      }
+  	}
+
+  function updateHiddenField() {
+      const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
+      let pupilPremiumCount = 0;
+        for (let i = 0; i < numChildren; i++) {
+            if (document.getElementById(`pp${i}`) && document.getElementById(`pp${i}`).checked) {
+                pupilPremiumCount++;
+            }
+        }
+      const payingChildren = numChildren - pupilPremiumCount;
+		  document.getElementById('hiddenField').value = payingChildren;
+		  const paymentMethodSelect = document.getElementById('paymentMethod');
+		  const paymentMessageElement = document.getElementById('paymentMessage');
+      paymentMessageElement.innerHTML = ''; // Clear the payment method message
+      if (payingChildren === 0) {
+			  paymentMethodSelect.innerHTML = '<option value="">Payment not required. Please click Submit below.</option>';
+			  paymentMethodSelect.disabled = true;
+			  const paymentMessageElement = document.getElementById('paymentMessage');
+			  paymentMessageElement.innerHTML = ''; // Clear message if no selection			
+		  } else {
+			  paymentMethodSelect.innerHTML = `
+  				<option value="" disabled selected>Select payment method</option>
+				  <option value="card">Pay by card</option>
+				  <option value="bank">Pay by bank transfer</option>`;
+		  	paymentMethodSelect.disabled = false;
+		  }
+  	}
+
+
+	// HANDLE FORM SUBMISSION
+  function handleFormSubmit(event) {
+   	event.preventDefault();  // Prevent the default form submission
+    
+    //Run validation checks on email addresses and phone number
+	  if (!checkEmail() || !checkEmailConfirm() || !checkPhoneNumber()) {
+      event.preventDefault(); // Stop form submission
+		  return;
+   	}
+
+	  //Check for any invalid sessions selected
+	  const sessionErrors = document.querySelectorAll('[id^="sessionError"]');
+    for (let error of sessionErrors) {
+      if (error.style.display === 'block') {
+        error.scrollIntoView({ behavior: 'smooth', block: 'center' }); // Scroll to first error
+        return; // Stop form submission
+      }
     }
-	
-	}
+
+    //Disable the submission button to avoid multiple clicks
+    const submitButton = document.querySelector('button[type="submit"]');
+    submitButton.textContent = 'Submitting...';
+    submitButton.disabled = true;
+
+	  //Save the form data for local storage in case an error occurs during submission
+	  if (localStorage.getItem('cookieConsent')) {
+	    saveFormData();
+	  }
+
+    // Collect form data
+    	var formData = {
+	        name: document.getElementById('name').value,
+	        email: document.getElementById('email').value,
+	        phone: document.getElementById('phone').value,
+	        numChildren: document.getElementById('numChildren').value,
+			payingChildren: document.getElementById('hiddenField').value,
+	        paymentMethod: document.getElementById('paymentMethod').value,
+	        agreeTerms: document.getElementById('terms').checked,
+	        agreeMsg: document.getElementById('msgpermission').checked,
+	        agreeStay: document.getElementById('accompany').checked,
+	        willVolunteer: document.getElementById('volunteer').checked,
+		  };
+		// Collect children data
+  		var childrenData = [];
+		  for (let i = 0; i < formData.numChildren; i++) {
+	  		childrenData.push({
+          	session: document.getElementById(`session${i}`).value,
+          	childName: document.getElementById(`childName${i}`).value,
+          	childClass: document.getElementById(`childClass${i}`).value,
+          	songRequest: document.getElementById(`songRequest${i}`).value,
+			      allergies: document.getElementById(`allergies${i}`).value,
+          	accompanyingAdult: document.getElementById(`accompanyingAdult${i}`).value
+        		});
+      }
+      formData.children = childrenData;
+			
+	  // **Replace with your Apps Script Web App URL**
+	  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoDgrDc-lal3lLXLoTu_-0EzLpF016RSBiFi3oOABY2glbeY6uF13ky6U31ksPCHBZ/exec";
+
+	  // Send the data to the Google Apps Script Web App
+	  fetch(APPS_SCRIPT_URL, {
+  		redirect: "follow",
+		  method: "POST",
+		  mode: "cors",
+		  headers: { "Content-Type": "text/plain;charset=utf-8" },
+		  body: JSON.stringify(formData),
+		  })
+	    .then(response => response.text()) // or `.json()` if your script returns JSON
+	    .then(paymentUrl => {
+		    clearFormData();  //Successful response received from script, can delete locally saved data
+		    if (formData.paymentMethod === "card") {
+		      window.location.href = paymentUrl; // Redirect for card payments
+    	  } else {
+		      document.body.innerHTML = paymentUrl; // Show bank transfer details
+    	  }
+	    })
+  	  .catch(error => {
+		    alert("Sorry, an error occurred whilst attempting to submit your form.  Please check your network connection and try again.  Contact hello@gvsa.org.uk for support if you're still having problems.");
+		    submitButton.textContent = 'Submit';
+      	submitButton.disabled = false;
+	    });
+	  }
 	
   </script>
-
 </body>
 </html>
