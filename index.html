@@ -6,10 +6,57 @@
   <title>GVSA Disco Tickets</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {
+    
+	
+	#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 20px;
+    background-color: #fff; /* White background for the header */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#logo {
+    height: 50px; /* Adjust the logo size as needed */
+    width: auto;
+}
+
+#business-name {
+    font-size: 20px; /* Adjust the font size */
+    font-weight: bold;
+    color: #333; /* Adjust text color */
+    margin-left: 10px; /* Space between logo and name */
+    line-height: 1.2; /* Optional: Adjust line spacing between the two lines */
+}
+
+@media (max-width: 768px) {
+    #header {
+        padding: 10px;
+        justify-content: left;
+    }
+
+    #logo {
+        height: 40px; /* Adjust logo size for smaller screens */
+    }
+
+    #business-name {
+        font-size: 18px; /* Adjust font size for mobile screens */
+    }
+}
+	
+	
+	
+	body {
       font-family: Arial, sans-serif;
       padding: 20px;
       background-color: #f4f7fa;
+	  margin-top: 80px;
     }
     .form-container {
       max-width: 800px;
@@ -26,6 +73,21 @@
       margin-top: 10px;
       font-style: italic;
     }
+	
+	
+	textarea.form-control {
+    min-height: 60px; /* Minimum height for larger screens */
+    resize: vertical; /* Allow user to resize vertically if needed */
+}
+
+/* Apply taller height on mobile devices */
+@media (max-width: 768px) {
+    textarea.form-control {
+        min-height: 160px; /* Increase height for mobile */
+    }
+}
+	
+	
 	
 	button[type="submit"].btn.btn-primary {
     background-color: #FFD100; /* Change the background color */
@@ -50,8 +112,17 @@ button[type="submit"].btn.btn-primary:hover {
     border-radius: 8px;
     width: 400px; /* Adjust width as needed */
 	font-size: 14px;
+	box-sizing: border-box; 
 }
 
+/* Apply adjustments for mobile screens */
+@media (max-width: 768px) {
+    #cookie-banner {
+        width: 90%; /* Make the banner take up 90% of the screen width */
+        left: 5%; /* Position it in the center with some padding */
+        right: auto; /* Remove the right alignment */
+    }
+}
 
 #accept-cookies {
     background-color: #000000;
@@ -98,7 +169,10 @@ button[type="submit"].btn.btn-primary:hover {
   </div>
 </div>
 
-
+<div id="header" class="d-flex align-items-center">
+  <img src="https://lh4.googleusercontent.com/XbH-ive5K4P2qYjvWCGQgNjzPkWBG5FpgTCn9Qwr2EvxBNO5fRoQlAESr-OvAFFEaKMro6mjNAQDR97a6D_quls=w16383" alt="Logo" id="logo" class="me-2">
+  <span id="business-name">Golden Valley<br>School Association</span>
+</div>
   <div class="form-container">
     <h1>GVSA Disco Tickets</h1>
     <p>Please complete the form below to buy your tickets for the GVSA Disco.</p>
