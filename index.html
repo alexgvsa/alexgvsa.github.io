@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>GVSA Disco Tickets</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>	
@@ -136,6 +137,24 @@
       cursor: pointer;
       font-size: 20px;
     }
+
+    /* Formatting of the 'loading' overlay' */
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      z-index: 2000; /* Higher than other elements */
+      display: none; /* Hidden by default */
+}
 	</style>
 </head>
 
@@ -154,6 +173,12 @@
   <span id="business-name">Golden Valley<br>School Association</span>
 </div>
   <div class="form-container">
+    <div id="loading-overlay">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p>Submitting your form, please wait...</p>
+    </div>
     <h1>GVSA Disco Tickets</h1>
     <p>Please complete the form below to buy your tickets for the GVSA Disco.</p>
     <form id="discoForm" onsubmit="handleFormSubmit(event)">
@@ -679,6 +704,9 @@
     submitButton.textContent = 'Submitting...';
     submitButton.disabled = true;
 
+    // Show loading overlay
+    document.getElementById("loading-overlay").style.display = "flex";
+
 	  //Save the form data for local storage in case an error occurs during submission
 	  if (localStorage.getItem('cookieConsent')) {
 	    saveFormData();
@@ -712,7 +740,7 @@
       formData.children = childrenData;
 			
 	  // **Replace with your Apps Script Web App URL**
-	  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoDgrDc-lal3lLXLoTu_-0EzLpF016RSBiFi3oOABY2glbeY6uF13ky6U31ksPCHBZ/exec";
+	  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1VnrvCD8qaT9gb9aLTdzQaUDJxID9YnhNyO2VzL5x0tETNPvXDPD8mAeRCrMwUSi3/exec";
 
 	  // Send the data to the Google Apps Script Web App
 	  fetch(APPS_SCRIPT_URL, {
@@ -735,6 +763,7 @@
 		    alert("Sorry, an error occurred whilst attempting to submit your form.  Please check your network connection and try again.  Contact hello@gvsa.org.uk for support if you're still having problems.");
 		    submitButton.textContent = 'Submit';
       	submitButton.disabled = false;
+        document.getElementById("loading-overlay").style.display = "none"; // Hide overlay on error
 	    });
 	  }
 	
