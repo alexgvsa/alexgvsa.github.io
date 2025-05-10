@@ -1,8 +1,8 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viewport for mobile responsiveness -->
   <title>GVSA Pre-Orders</title>
   <link rel="icon" type="image/x-icon" href="https://disco.gvsa.org.uk/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -27,17 +27,19 @@
 
   header h1 {
     margin: 0;
+    font-size: 1.5em; /* Adjust font size for small screens */
   }
 
   .cart-icon {
-  position: relative;
-  cursor: pointer; /* Ensures hand cursor on hover */
-}
+    position: relative;
+    cursor: pointer;
+  }
 
   .cart-icon i {
-  color: black; /* Change to any color you want */
-  font-size: 18px; /* Adjust the size */
-}
+    color: black;
+    font-size: 18px;
+  }
+
   .cart-icon::after {
     content: attr(data-count);
     position: absolute;
@@ -79,7 +81,7 @@
 
   #product-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Ensures consistent width */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1em;
     padding: 1em;
     max-width: 1200px;
@@ -93,23 +95,21 @@
     border-radius: 8px;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    width: 100%; /* Ensures full width of grid cell */
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Ensures button stays at the bottom */
+    justify-content: flex-end;
     box-sizing: border-box;
-    overflow: hidden; /* Prevents any content from spilling out */
-    max-height: 500px; /* Prevents tile from becoming too tall */
+    max-height: 500px;
   }
 
   .product img {
     max-width: 100%;
-    max-height: 150px; /* Limits image height */
-    object-fit: cover; /* Ensures the image covers the space, maintaining aspect ratio */
-    margin-bottom: 1em; /* Adds space between image and description */
-    display: block; /* Ensures image is a block-level element inside the tile */
+    max-height: 150px;
+    object-fit: cover;
+    margin-bottom: 1em;
+    display: block;
     margin-left: auto;
-    margin-right: auto; /* Centers image */
+    margin-right: auto;
   }
 
   .product p {
@@ -119,7 +119,7 @@
 
   .product .product-details {
     margin-top: 0.1em;
-    flex-grow: 1; /* Ensures description doesn't push other content */
+    flex-grow: 1;
   }
 
   .quantity-controls {
@@ -133,7 +133,6 @@
 
   .product button {
     margin-top: 1em;
-    margin-bottom: 0; /* Ensures the button stays inside the tile */
   }
 
   button {
@@ -185,21 +184,21 @@
   }
 
   #close-cart.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background: none;
-  border: none;
-  font-size: 1.8em;
-  color: #333;
-  cursor: pointer;
-  z-index: 101;
-  transition: color 0.2s ease;
-}
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: #333;
+    cursor: pointer;
+    z-index: 101;
+    transition: color 0.2s ease;
+  }
 
-#close-cart.close-btn:hover {
-  color: #999;
-}
+  #close-cart.close-btn:hover {
+    color: #999;
+  }
 
   .cart-item-controls {
     display: flex;
@@ -222,11 +221,55 @@
     margin-top: 1em;
     color: green;
   }
-</style>
 
-  
-  
-  
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 1.2em; /* Smaller header font */
+    }
+
+    #category-buttons button {
+      padding: 0.4em 0.8em;
+    }
+
+    .product {
+      max-height: auto; /* Allow products to stretch */
+      padding: 0.8em;
+    }
+
+    .product button {
+      padding: 0.7em 1em; /* Larger buttons for mobile */
+    }
+
+    #cart-sidebar {
+      width: 280px; /* Narrower cart sidebar for smaller screens */
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cart-icon i {
+      font-size: 22px; /* Bigger cart icon for mobile */
+    }
+
+    #cart-sidebar {
+      width: 100%;
+      padding: 1em;
+    }
+
+    .product {
+      max-height: none; /* No height limitation for mobile */
+    }
+
+    #product-list {
+      grid-template-columns: 1fr; /* Stack products on small screens */
+    }
+
+    #category-buttons {
+      padding: 0.5em;
+      gap: 0.3em;
+    }
+  }
+</style>
 </head>
 <body>
 
@@ -258,6 +301,7 @@
   </form>
   <div id="response"></div>
 </div>
+
 
 <script>
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby5a8_vSYApgIhuhTvdqKLkkpWTFkJUU6WG3iKPN9fkPFAe96OUc91v9J93PKyrh9xOWQ/exec'; // Replace with your Apps Script URL
