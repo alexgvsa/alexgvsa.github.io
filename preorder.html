@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GVSA Pre-Orders</title>
+  <link rel="icon" type="image/x-icon" href="https://disco.gvsa.org.uk/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f9f9f9;
+  }
+
+  header {
+    background: rgb(255, 209, 0);
+    color: #000000;
+    padding: 1em 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  header h1 {
+    margin: 0;
+  }
+
+  .cart-icon {
+  position: relative;
+  cursor: pointer; /* Ensures hand cursor on hover */
+}
+
+  .cart-icon i {
+  color: black; /* Change to any color you want */
+  font-size: 18px; /* Adjust the size */
+}
+  .cart-icon::after {
+    content: attr(data-count);
+    position: absolute;
+    top: 12px;
+    right: -9px;
+    background: red;
+    color: white;
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 50%;
+    display: none;
+  }
+
+  .cart-icon[data-count]:not([data-count="0"])::after {
+    display: inline-block;
+  }
+
+  #category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    padding: 1em;
+    justify-content: center;
+    background: #eee;
+  }
+
+  #category-buttons button {
+    padding: 0.5em 1em;
+    border: none;
+    background: #ccc;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  #category-buttons button.active {
+    background: #333;
+    color: #fff;
+  }
+
+  #product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Ensures consistent width */
+    gap: 1em;
+    padding: 1em;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .product {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 1em;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    width: 100%; /* Ensures full width of grid cell */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Ensures button stays at the bottom */
+    box-sizing: border-box;
+    overflow: hidden; /* Prevents any content from spilling out */
+    max-height: 500px; /* Prevents tile from becoming too tall */
+  }
+
+  .product img {
+    max-width: 100%;
+    max-height: 150px; /* Limits image height */
+    object-fit: cover; /* Ensures the image covers the space, maintaining aspect ratio */
+    margin-bottom: 1em; /* Adds space between image and description */
+    display: block; /* Ensures image is a block-level element inside the tile */
+    margin-left: auto;
+    margin-right: auto; /* Centers image */
+  }
+
+  .product p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .product .product-details {
+    margin-top: 0.1em;
+    flex-grow: 1; /* Ensures description doesn't push other content */
+  }
+
+  .quantity-controls {
+    margin-top: 0.1em;
+  }
+
+  .quantity-controls button {
+    padding: 0.3em 0.7em;
+    font-size: 1em;
+  }
+
+  .product button {
+    margin-top: 1em;
+    margin-bottom: 0; /* Ensures the button stays inside the tile */
+  }
+
+  button {
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0.5em 1em;
+  }
+
+  button:hover {
+    background: #555;
+  }
+
+  #cart-sidebar {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 350px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    padding: 1.5em;
+    transition: right 0.3s ease;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  #cart-sidebar.open {
+    right: 0;
+  }
+
+  #overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    z-index: 99;
+  }
+
+  #overlay.visible {
+    display: block;
+  }
+
+  #cart-items li {
+    margin-bottom: 1em;
+  }
+
+  #close-cart.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  color: #333;
+  cursor: pointer;
+  z-index: 101;
+  transition: color 0.2s ease;
+}
+
+#close-cart.close-btn:hover {
+  color: #999;
+}
+
+  .cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  .cart-item-controls button {
+    padding: 0.2em 0.5em;
+    font-size: 1em;
+  }
+
+  form input {
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 1em;
+  }
+
+  #response {
+    margin-top: 1em;
+    color: green;
+  }
+</style>
+
+  
+  
+  
+</head>
+<body>
+
+<header>
+  <h1>GVSA Disco Pre-Order Menu</h1>
+  <div class="cart-icon" id="cart-toggle" data-count="0">
+    <i class="fas fa-shopping-cart"></i>
+  </div>
+</header>
+
+<div id="category-buttons"></div>
+<div id="product-list">Loading products...</div>
+
+<div id="overlay"></div>
+
+<div id="cart-sidebar">
+    <button id="close-cart" class="close-btn" aria-label="Close cart">&times;</button>
+    <h2>Shopping Cart</h2>
+  <ul id="cart-items"></ul>
+  <p><strong>Total: £<span id="cart-total">0.00</span></strong></p>
+
+  <h3>Checkout</h3>
+  <form id="checkout-form">
+    <label>Name:</label>
+    <input type="text" name="name" required>
+    <label>Email:</label>
+    <input type="email" name="email" required>
+    <button type="submit">Checkout</button>
+  </form>
+  <div id="response"></div>
+</div>
+
+<script>
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby5a8_vSYApgIhuhTvdqKLkkpWTFkJUU6WG3iKPN9fkPFAe96OUc91v9J93PKyrh9xOWQ/exec'; // Replace with your Apps Script URL
+  let products = [];
+  let cart = [];
+  let currentCategory = 'All';
+
+  async function fetchProducts() {
+    const res = await fetch(WEB_APP_URL);
+    products = await res.json();
+    buildCategoryButtons();
+    displayProducts();
+  }
+
+  function buildCategoryButtons() {
+    const categories = ['All', ...new Set(products.map(p => p.Category))];
+    const container = document.getElementById('category-buttons');
+    container.innerHTML = '';
+
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.textContent = cat;
+      if (cat === 'All') btn.classList.add('active');
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#category-buttons button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = cat;
+        displayProducts();
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function displayProducts() {
+    const container = document.getElementById('product-list');
+    container.innerHTML = '';
+
+    products.filter(p => currentCategory === 'All' || p.Category === currentCategory)
+      .forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${p.ImageURL}" alt="${p.Name}">
+          <h3>${p.Name}</h3>
+          <p>${p.Description}</p>
+          <p class="price">${formatPrice(p.Price)}</p>
+          <div class="quantity-controls">
+            <button onclick="adjustQty('${p.ID}', -1)">−</button>
+            <span id="qty-${p.ID}">1</span>
+            <button onclick="adjustQty('${p.ID}', 1)">+</button>
+          </div>
+          <button onclick="addToCart('${p.ID}')">Add to Cart</button>
+        `;
+        container.appendChild(div);
+      });
+  }
+
+  const quantities = {};
+
+  function adjustQty(productId, delta) {
+    quantities[productId] = Math.max(1, (quantities[productId] || 1) + delta);
+    document.getElementById(`qty-${productId}`).textContent = quantities[productId];
+  }
+
+  function addToCart(productId) {
+    const product = products.find(p => p.ID === productId);
+    const qty = quantities[productId] || 1;
+    const existing = cart.find(item => item.ID === productId);
+    if (existing) {
+      existing.quantity += qty;
+    } else {
+      cart.push({ ...product, quantity: qty });
+    }
+    updateCartUI();
+  }
+
+  function formatPrice(rawPrice) {
+  const num = Number(rawPrice);
+  return isNaN(num) ? "£0.00" : `£${num.toFixed(2)}`;
+}
+
+
+  function updateCartUI() {
+    const list = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    const cartToggle = document.getElementById('cart-toggle');
+
+    list.innerHTML = '';
+    let total = 0;
+    let count = 0;
+
+    cart.forEach(item => {
+      const itemTotal = item.quantity * item.Price;
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <strong>${item.Name}</strong><br>
+        ${item.quantity} x ${formatPrice(item.Price)} = £${itemTotal.toFixed(2)}
+        <div class="cart-item-controls">
+          <button onclick="changeCartQty('${item.ID}', -1)">−</button>
+          <button onclick="changeCartQty('${item.ID}', 1)">+</button>
+          <button onclick="removeFromCart('${item.ID}')">🗑️</button>
+        </div>
+      `;
+      list.appendChild(li);
+      total += itemTotal;
+      count += item.quantity;
+    });
+
+    totalEl.textContent = total.toFixed(2);
+    cartToggle.setAttribute('data-count', count);
+  }
+
+  function changeCartQty(productId, delta) {
+    const item = cart.find(i => i.ID === productId);
+    if (!item) return;
+    item.quantity += delta;
+    if (item.quantity <= 0) {
+      removeFromCart(productId);
+    }
+    updateCartUI();
+  }
+
+  function removeFromCart(productId) {
+    cart = cart.filter(item => item.ID !== productId);
+    updateCartUI();
+  }
+
+  document.getElementById('cart-toggle').addEventListener('click', () => {
+    document.getElementById('cart-sidebar').classList.add('open');
+    document.getElementById('overlay').classList.add('visible');
+  });
+
+  document.getElementById('overlay').addEventListener('click', () => {
+    document.getElementById('cart-sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('visible');
+  });
+
+  document.getElementById('close-cart').addEventListener('click', () => {
+  document.getElementById('cart-sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('visible');
+});
+
+  document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const payload = {
+      name: form.name.value,
+      email: form.email.value,
+      items: cart.map(item => ({
+        id: item.ID,
+        name: item.Name,
+        quantity: item.quantity,
+        price: item.Price
+      }))
+    };
+
+    try {
+      const res = await fetch(WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const result = await res.json();
+      document.getElementById('response').textContent = result.message || "Order submitted!";
+      cart = [];
+      updateCartUI();
+      form.reset();
+      setTimeout(() => {
+        document.getElementById('cart-sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('visible');
+        document.getElementById('response').textContent = '';
+      }, 2000);
+    } catch (err) {
+      document.getElementById('response').textContent = 'Error sending order.';
+    }
+  });
+
+  fetchProducts();
+
+  document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.getElementById('cart-sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('visible');
+  }
+});
+
+
+</script>
+
+</body>
+</html>
