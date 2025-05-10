@@ -7,6 +7,9 @@
   <link rel="icon" type="image/x-icon" href="https://disco.gvsa.org.uk/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+  
+  
+  
   body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -191,6 +194,9 @@
     margin-bottom: 1em;
   }
 
+  
+
+
   #close-cart.close-btn {
     position: absolute;
     top: 10px;
@@ -219,6 +225,23 @@
     font-size: 1em;
   }
 
+  .cart-item-controls button.delete-btn {
+  background-color: #800020; /* Burgundy */
+  color: white;
+  padding: 0.3em 0.6em; /* Same size as other buttons */
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.cart-item-controls button.delete-btn:hover {
+  background-color: #9e2a2f; /* Lighter burgundy on hover */
+}
+
+.cart-item-controls button.delete-btn i {
+  font-size: 1em; /* Keep the icon size consistent */
+}
+  
   form input {
     width: 100%;
     padding: 0.5em;
@@ -410,7 +433,9 @@
         <div class="cart-item-controls">
           <button onclick="changeCartQty('${item.ID}', -1)">−</button>
           <button onclick="changeCartQty('${item.ID}', 1)">+</button>
-          <button onclick="removeFromCart('${item.ID}')">🗑️</button>
+         <button class="delete-btn" onclick="removeFromCart('${item.ID}')">
+      <i class="fas fa-trash-alt"></i> <!-- Font Awesome Trash Icon -->
+    </button>
         </div>
       `;
       list.appendChild(li);
