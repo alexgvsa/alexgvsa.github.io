@@ -91,19 +91,20 @@
     margin: 0 auto;
   }
 
-  .product {
-    background: #fff;
-    border: 1px solid #ddd;
-    padding: 1em;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    box-sizing: border-box;
-    max-height: 500px;
-  }
+.product {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1em;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  max-height: 500px;
+  min-height: 320px; /* Ensure a minimum height */
+}
 
   .product img {
     max-width: 100%;
@@ -365,30 +366,35 @@
       container.appendChild(btn);
     });
   }
+function displayProducts() {
+  const container = document.getElementById('product-list');
+  container.innerHTML = ''; // Clear existing content
 
-  function displayProducts() {
-    const container = document.getElementById('product-list');
-    container.innerHTML = '';
+  products.filter(p => currentCategory === 'All' || p.Category === currentCategory)
+    .forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'product';
 
-    products.filter(p => currentCategory === 'All' || p.Category === currentCategory)
-      .forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'product';
-        div.innerHTML = `
-          <img src="${p.ImageURL}" alt="${p.Name}">
-          <h3>${p.Name}</h3>
-          <p>${p.Description}</p>
-          <p class="price">${formatPrice(p.Price)}</p>
-          <div class="quantity-controls">
-            <button onclick="adjustQty('${p.ID}', -1)">−</button>
-            <span id="qty-${p.ID}">1</span>
-            <button onclick="adjustQty('${p.ID}', 1)">+</button>
-          </div>
-          <button onclick="addToCart('${p.ID}')">Add to Cart</button>
-        `;
-        container.appendChild(div);
-      });
-  }
+      // Check if the ImageURL is not empty or broken
+      const imageHtml = p.ImageURL ? `
+        <img src="${p.ImageURL}" alt="${p.Name}" onerror="this.style.display='none'">
+      ` : '';
+
+      div.innerHTML = `
+        ${imageHtml} <!-- Conditionally rendered image -->
+        <h3>${p.Name}</h3>
+        <p>${p.Description}</p>
+        <p class="price">${formatPrice(p.Price)}</p>
+        <div class="quantity-controls">
+          <button onclick="adjustQty('${p.ID}', -1)">−</button>
+          <span id="qty-${p.ID}">1</span>
+          <button onclick="adjustQty('${p.ID}', 1)">+</button>
+        </div>
+        <button onclick="addToCart('${p.ID}')">Add to Cart</button>
+      `;
+      container.appendChild(div);
+    });
+}
 
   const quantities = {};
 
