@@ -256,7 +256,7 @@
 
   #response {
     margin-top: 1em;
-    color: green;
+    color: rgb(231, 45, 45);
   }
 
   /* Mobile adjustments */
@@ -343,6 +343,35 @@
   100% { opacity: 0.3; }
 }
 
+  .submitspinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-top: 2px solid #000;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+    visibility: hidden;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+#checkout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Optional: adds spacing between text and spinner */
+}
+
 
 #loading-overlay {
   position: fixed;
@@ -381,6 +410,33 @@ form input, form select {
   background-color: #fff;
 }
 
+@keyframes pulse {
+  0% {
+    background-color: #333; /* The default dark grey button color */
+  }
+
+  50% {
+    background-color: #fbc02d; /* Yellow */
+  }
+  62.5% {
+    background-color: #EAB430;
+  }
+  75% {
+    background-color: #C49932;
+  }
+  87.5% {
+    background-color: #846C33;
+  }
+  100% {
+    background-color: #333; /* The default dark grey button color */
+  }
+}
+
+.pulse {
+  animation: pulse 0.8s ease-out;
+}
+
+
 
 </style>
 </head>
@@ -406,8 +462,8 @@ form input, form select {
 <div id="overlay"></div>
 
 <div id="cart-sidebar">
-    <button id="close-cart" class="close-btn" aria-label="Close cart">&times;</button>
-    <h2>Shopping Cart</h2>
+    <button id="close-cart" class="close-btn" aria-label="Close basket">&times;</button>
+    <h2>Shopping Basket</h2>
   <ul id="cart-items"></ul>
   <p><strong>Total: £<span id="cart-total">0.00</span></strong></p>
 
@@ -420,26 +476,33 @@ form input, form select {
     
       <label for="session">Select Disco Session:</label>
       <select name="session" required>
+         <option value="" disabled selected>Select a session</option>
         <option value="Session 1">Session 1 (Reception) - 2:30pm</option>
         <option value="Session 2">Session 2 (Years 1/2) - 4pm</option>
         <option value="Session 3">Session 3 (Years 3/4) - 5:30pm</option>
         <option value="Session 4">Session 4 (Years 5/6) - 7pm</option>
       </select>
     <p></p>
-    <button type="submit" id="checkout-button" disabled>Proceed to payment</button>
+    <button type="submit" id="checkout-button" disabled>
+      <span class="btn-text">Proceed to payment</span>
+      <span class="submitspinner"></span>
+    </button>
   </form>
   <div id="response"></div>
 </div>
 
 
 <script>
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycby5a8_vSYApgIhuhTvdqKLkkpWTFkJUU6WG3iKPN9fkPFAe96OUc91v9J93PKyrh9xOWQ/exec'; // Replace with your Apps Script URL
+  
+  let isCheckoutInProgress = false;  // Declare the flag globally at the top
+
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw2emGWQBk97qu4rBKrN7DJCIetMko7afe_3_iPukuXqm7MCTGq3zNENWKZfWMmL5lqMg/exec'; // Replace with your Apps Script URL
   let products = [];
   let cart = [];
-  let currentCategory = 'All';
+  let currentCategory = 'All products';
 
   async function fetchProducts() {
-    const res = await fetch(WEB_APP_URL);
+    const res = await fetch(WEB_APP_URL + '?action=getProducts');
     products = await res.json();
     buildCategoryButtons();
     displayProducts();
@@ -448,14 +511,14 @@ form input, form select {
   }
 
   function buildCategoryButtons() {
-    const categories = ['All', ...new Set(products.map(p => p.Category))];
+    const categories = ['All products', ...new Set(products.map(p => p.Category))];
     const container = document.getElementById('category-buttons');
     container.innerHTML = '';
 
     categories.forEach(cat => {
       const btn = document.createElement('button');
       btn.textContent = cat;
-      if (cat === 'All') btn.classList.add('active');
+      if (cat === 'All products') btn.classList.add('active');
       btn.addEventListener('click', () => {
         document.querySelectorAll('#category-buttons button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
@@ -465,11 +528,20 @@ form input, form select {
       container.appendChild(btn);
     });
   }
+
+  function resetCheckoutButton() {
+  document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+  const proceedBtn = document.getElementById('checkout-button');
+  proceedBtn.querySelector('.btn-text').textContent = 'Proceed to payment';
+  proceedBtn.querySelector('.submitspinner').style.visibility = 'hidden';
+  isCheckoutInProgress = false;
+}
+
 function displayProducts() {
   const container = document.getElementById('product-list');
   container.innerHTML = ''; // Clear existing content
 
-  products.filter(p => currentCategory === 'All' || p.Category === currentCategory)
+  products.filter(p => currentCategory === 'All products' || p.Category === currentCategory)
     .forEach(p => {
       const div = document.createElement('div');
       div.className = 'product';
@@ -489,7 +561,7 @@ function displayProducts() {
           <span id="qty-${p.ID}">1</span>
           <button onclick="adjustQty('${p.ID}', 1)">+</button>
         </div>
-        <button onclick="addToCart('${p.ID}')">Add to Cart</button>
+        <button onclick="addToCart('${p.ID}')">Add to basket</button>
       `;
       container.appendChild(div);
     });
@@ -511,6 +583,23 @@ function displayProducts() {
     } else {
       cart.push({ ...product, quantity: qty });
     }
+    
+     // Reset the quantity to 1
+  quantities[productId] = 1;
+  document.getElementById(`qty-${productId}`).textContent = 1;  // Update quantity display
+  
+  // Add pulse effect to the "Add to basket" button
+  const addToCartBtn = document.querySelector(`button[onclick="addToCart('${productId}')"]`);
+  addToCartBtn.classList.add('pulse');
+
+  // Remove pulse class after animation ends
+  setTimeout(() => {
+    addToCartBtn.classList.remove('pulse');
+  }, 500); // Match the duration of the pulse animation
+    
+    
+    
+    
     updateCartUI();
   }
 
@@ -524,7 +613,7 @@ function displayProducts() {
     const list = document.getElementById('cart-items');
     const totalEl = document.getElementById('cart-total');
     const cartToggle = document.getElementById('cart-toggle');
-    const checkoutBtn = document.getElementById('checkout-button'); // ← Add this line
+    const checkoutBtn = document.getElementById('checkout-button'); //
 
     list.innerHTML = '';
     let total = 0;
@@ -556,6 +645,7 @@ function displayProducts() {
     if (checkoutBtn) {
     checkoutBtn.disabled = cart.length === 0;
   }
+  localStorage.setItem('cart', JSON.stringify(cart));
   }
 
   function changeCartQty(productId, delta) {
@@ -579,8 +669,10 @@ function displayProducts() {
   });
 
   document.getElementById('overlay').addEventListener('click', () => {
+    if (!isCheckoutInProgress) {
     document.getElementById('cart-sidebar').classList.remove('open');
     document.getElementById('overlay').classList.remove('visible');
+   }
   });
 
   document.getElementById('close-cart').addEventListener('click', () => {
@@ -590,11 +682,23 @@ function displayProducts() {
 
   document.getElementById('checkout-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    // Disable all buttons on the page
+    document.querySelectorAll('button').forEach(btn => btn.disabled = true);
+
+    // Change button text and show spinner
+    const proceedBtn = document.getElementById('checkout-button');
+    proceedBtn.querySelector('.btn-text').textContent = 'Please wait...';
+    proceedBtn.querySelector('.submitspinner').style.visibility = 'visible';
+
+    // Set the flag to true when the checkout button is clicked
+    isCheckoutInProgress = true;
 
     const form = e.target;
     const payload = {
       name: form.name.value,
       email: form.email.value,
+      session: form.session.value,
       items: cart.map(item => ({
         id: item.ID,
         name: item.Name,
@@ -603,30 +707,47 @@ function displayProducts() {
       }))
     };
 
-    try {
-      const res = await fetch(WEB_APP_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const result = await res.json();
-      document.getElementById('response').textContent = result.message || "Order submitted!";
-      cart = [];
-      updateCartUI();
-      form.reset();
-      setTimeout(() => {
-        document.getElementById('cart-sidebar').classList.remove('open');
-        document.getElementById('overlay').classList.remove('visible');
-        document.getElementById('response').textContent = '';
-      }, 2000);
-    } catch (err) {
-      document.getElementById('response').textContent = 'Error sending order.';
-    }
+try {
+  const res = await fetch(WEB_APP_URL, {
+    redirect: "follow",
+    method: 'POST',
+    mode: "cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload),
+  });
+  
+  const result = await res.json();
+   
+  // Check if the result contains a Stripe Checkout session URL
+  if (result.url) {
+    // Redirect the user to Stripe Checkout
+    window.location.href = result.url;
+   } else if (result.error) {
+    // An error was returned - show and log the error
+    resetCheckoutButton();
+    document.getElementById('response').textContent = "500 Internal Server Error";
+    console.error("Order submission error:", result.error);
+  } else {
+    // Unexpected response
+    resetCheckoutButton();
+    document.getElementById('response').textContent = "500 Internal Server Error";
+    console.warn("Unexpected response:", result);
+  }
+} catch (err) {
+    resetCheckoutButton();  
+    document.getElementById('response').textContent = 'Sorry, there was an error submitting your order to the server.';
+    console.error("Fetch error:", err);
+}
   });
 
   fetchProducts();
-
-  document.addEventListener('keydown', (e) => {
+  const savedCart = localStorage.getItem('cart');
+  if (savedCart) {
+    cart = JSON.parse(savedCart);
+  }
+    updateCartUI();
+  
+    document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     document.getElementById('cart-sidebar').classList.remove('open');
     document.getElementById('overlay').classList.remove('visible');
