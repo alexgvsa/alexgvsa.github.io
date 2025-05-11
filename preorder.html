@@ -53,10 +53,9 @@ header h1 {
   }
 
   header h1 {
-    font-size: 1.2em; /* Slightly smaller header font */
-    white-space: normal; /* Allow wrapping if necessary */
-    text-align: center; /* Center the text for smaller screens */
-    flex-grow: 1;
+    font-size: 1.2em;
+    white-space: normal; /* Allow wrapping */
+    text-align: left; /* Align left to avoid centering */
   }
 
   .cart-icon {
@@ -71,8 +70,9 @@ header h1 {
   }
 
   header h1 {
-    font-size: 1.1em; /* Even smaller header font */
-    text-align: center; /* Center the title */
+    font-size: 1.0em;
+    white-space: normal; /* Allow wrapping */
+    text-align: left; /* Align left to avoid centering */
   }
 
   .cart-icon i {
@@ -499,7 +499,7 @@ form input, form select {
 <body>
 
   <header>
-  <h1>GVSA Disco - Refreshments Pre-Order</h1>
+  <h1>GVSA Disco - <br>Refreshments Pre-Order</h1>
   <div class="cart-icon" id="cart-toggle" data-count="0">
     <i class="fas fa-shopping-cart"></i>
   </div>
