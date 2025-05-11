@@ -14,22 +14,57 @@
     background: #f9f9f9;
   }
 
+header {
+  background: rgb(255, 209, 0);
+  color: #000000;
+  padding: 1em 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+header h1 {
+  margin: 0;
+  font-size: 1.5em; /* Larger size for header on regular screens */
+  white-space: nowrap; /* Prevents the title from breaking to a new line */
+}
+
+@media (max-width: 768px) {
   header {
-    background: rgb(255, 209, 0);
-    color: #000000;
-    padding: 1em 2em;
-    display: flex;
+    padding: 0.8em 1.5em; /* Adjust padding on smaller screens */
+    flex-direction: row; /* Keep them in a row */
     justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
   }
 
   header h1 {
-    margin: 0;
-    font-size: 1.5em; /* Adjust font size for small screens */
+    font-size: 1.2em;
+    white-space: normal; /* Allow wrapping */
+    text-align: left; /* Align left to avoid centering */
   }
+
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 0.6em 1em; /* Further reduce padding on very small screens */
+  }
+
+  header h1 {
+    font-size: 1.0em;
+    white-space: normal; /* Allow wrapping */
+    text-align: left; /* Align left to avoid centering */
+  }
+
+}
+
+
+
 
 /* Initially hide success and failure divs */
     .success, .failure {
@@ -149,7 +184,7 @@
 <body>
   
   <header>
-  <h1>GVSA Disco - Refreshments Pre-Order</h1>
+  <h1>GVSA Disco - <br>Refreshments Pre-Order</h1>
   </header>
 <div class="container">
   <div id="loading-overlay">
