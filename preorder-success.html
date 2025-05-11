@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viewport for mobile responsiveness -->
+  <title>GVSA Pre-Orders</title>
+  <link rel="icon" type="image/x-icon" href="https://disco.gvsa.org.uk/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+  
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f9f9f9;
+  }
+
+  header {
+    background: rgb(255, 209, 0);
+    color: #000000;
+    padding: 1em 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.5em; /* Adjust font size for small screens */
+  }
+
+/* Initially hide success and failure divs */
+    .success, .failure {
+      display: none;
+    }
+
+
+
+@media (max-width: 480px) {
+  #cart-sidebar {
+    max-width: 90%; /* For small screens, allow the cart to take up 90% of the width */
+  }
+}
+
+  
+  form input {
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 1em;
+  }
+
+  #response {
+    margin-top: 1em;
+    color: rgb(231, 45, 45);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 1.2em; /* Smaller header font */
+    }
+
+  }
+
+.spinner {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-top: 8px solid #fff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.3; }
+}
+
+
+#loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeInOut 2s infinite ease-in-out;
+  flex-direction: column; /* Arrange spinner and text vertically */
+}
+
+#loading-overlay p {
+  color: #fff;
+  font-size: 18px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Page content */
+#page-content {
+  display: none;
+}
+  /* Wrapper container to control content width and spacing */
+    .container {
+      max-width: 1200px; /* Adjust to the desired max width */
+      margin: 0 auto; /* Centers the content */
+      padding: 20px; /* Adds padding inside the container */
+    }
+
+
+        .success h1, .failure h1 {
+      margin-bottom: 10px;
+    }
+
+    .success p, .failure p {
+      margin-bottom: 15px;
+    }
+
+
+     /* Styling for the order summary */
+    #order-summary {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 15px;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px; /* Adjust for mobile padding */
+      }
+    }
+
+</style>
+</head>
+<body>
+  
+  <header>
+  <h1>GVSA Disco - Refreshments Pre-Order</h1>
+  </header>
+<div class="container">
+  <div id="loading-overlay">
+    <div class="spinner-border text-light" role="status">
+    </div>
+    <p>Processing your order, please wait...</p>
+    </div>  
+  <div id="success" class="success">
+      <h1>Your order is confirmed</h1>
+	    <p>Thank you for pre-ordering refreshments at the GVSA Disco.  Your order reference is: <span id="paymentRef"></span>.</p>
+      <p>A summary of your order is below, and confirmation has also been sent by email.  Your refreshments will be ready for you at your chosen disco session.</p>
+        <div id="order-summary"></div>   
+      <p>If you have any queries, please <a href="mailto:hello@gvsa.org.uk">get in touch</a>.</p>
+  </div>
+  <div id="failure" class="failure">
+    <h1>Sorry, something went wrong</h1>
+    <p></p>
+    <p>It's not you, it's us.  Your payment has been received and your refreshments pre-order has been placed.  Your order reference is: <span id="paymentRefErr"></span>. Unfortunately, though, we seem to have run into a technical problem when trying to show you the summary of your order.</p>
+    <p>Our team has been notified that this error occurred so that they can investigate.</p>
+    <p>If you have not received an email confirmation, please <a href="mailto:hello@gvsa.org.uk">get in touch</a> so that we can assist.</p>
+</div>
+</div>
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      
+      // This function deletes any form data previously saved to local storage
+        localStorage.removeItem('cart');
+      
+      // Get 'id' param from URL (case-insensitive)          
+      const urlParams = new URLSearchParams(window.location.search);
+      const ID = urlParams.get('id');
+  
+      if (!ID) {
+        alert("Missing transaction ID.");
+        return;
+      }
+
+      document.getElementById("paymentRef").textContent = ID;
+      document.getElementById("paymentRefErr").textContent = ID;
+  
+ try {
+        // Call the Apps Script web app
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbyELkAdi2y6FuPSGTo-gIXXUipZh85I-aeDyRUsBJm7jvQzL5RORbUKeyvkPqxWGjv0oA/exec?action=confirmOrder&id=${ID}`);
+        const data = await response.json();
+
+        // Hide loading overlay
+        document.getElementById("loading-overlay").style.display = "none";
+
+        if (data.result === "success") {
+          // Show the order summary and success message
+          document.getElementById("order-summary").innerHTML = data.itemsHtml;
+          document.getElementById("success").style.display = "block";
+        } else {
+          // Show the failure message
+          document.getElementById("failure").style.display = "block";
+        }
+      } catch (err) {
+        // Handle error scenario and hide loading overlay
+        document.getElementById("loading-overlay").style.display = "none";
+        document.getElementById("failure").style.display = "block";
+        alert(err.message);
+      }
+    });
+  </script>
+</body>
+</html>
