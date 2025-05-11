@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Viewport for mobile responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"> <!-- Viewport for mobile responsiveness -->
   <title>GVSA Pre-Orders</title>
   <link rel="icon" type="image/x-icon" href="https://disco.gvsa.org.uk/favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -15,33 +15,70 @@
     margin: 0;
     background: #f9f9f9;
   }
+header {
+  background: rgb(255, 209, 0);
+  color: #000000;
+  padding: 1em 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+}
 
+header h1 {
+  margin: 0;
+  font-size: 1.5em; /* Larger size for header on regular screens */
+  white-space: nowrap; /* Prevents the title from breaking to a new line */
+}
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+.cart-icon i {
+  color: black;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
   header {
-    background: rgb(255, 209, 0);
-    color: #000000;
-    padding: 1em 2em;
-    display: flex;
+    padding: 0.8em 1.5em; /* Adjust padding on smaller screens */
+    flex-direction: row; /* Keep them in a row */
     justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
   }
 
   header h1 {
-    margin: 0;
-    font-size: 1.5em; /* Adjust font size for small screens */
+    font-size: 1.2em; /* Slightly smaller header font */
+    white-space: normal; /* Allow wrapping if necessary */
+    text-align: center; /* Center the text for smaller screens */
+    flex-grow: 1;
   }
 
   .cart-icon {
-    position: relative;
-    cursor: pointer;
+    font-size: 18px; /* Larger icon size for mobile */
+    margin-left: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 0.6em 1em; /* Further reduce padding on very small screens */
+  }
+
+  header h1 {
+    font-size: 1.1em; /* Even smaller header font */
+    text-align: center; /* Center the title */
   }
 
   .cart-icon i {
-    color: black;
-    font-size: 18px;
+    font-size: 22px; /* Larger cart icon for mobile */
   }
+}
 
   .cart-icon::after {
     content: attr(data-count);
@@ -59,6 +96,7 @@
   .cart-icon[data-count]:not([data-count="0"])::after {
     display: inline-block;
   }
+
 
   #category-buttons {
     display: flex;
@@ -152,6 +190,10 @@
     background: #555;
   }
 
+  .no-hover:hover {
+  pointer-events: none;  /* Disable hover effect during animation */
+}
+
   button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -171,6 +213,13 @@
   z-index: 100;
   overflow-y: auto;
 }
+
+/* Adding a margin to the bottom of the sidebar itself */
+#cart-sidebar::after {
+  content: "";
+  margin-bottom: 2em; /* This adds extra white space below the button */
+}
+
 
 #cart-sidebar.open {
   right: 0; /* Brings it fully into view when opened */
@@ -370,9 +419,16 @@
   align-items: center;
   justify-content: center;
   gap: 8px; /* Optional: adds spacing between text and spinner */
+  margin-bottom: 5em; /* Adds space below the button */
 }
 
+#checkout-button .btn-text {
+  flex-grow: 1;
+}
 
+#cart-sidebar p {
+  margin-bottom: 2em; /* Adds space below the cart's total price */
+}
 #loading-overlay {
   position: fixed;
   top: 0;
@@ -487,13 +543,17 @@ form input, form select {
       <span class="btn-text">Proceed to payment</span>
       <span class="submitspinner"></span>
     </button>
+    <p></p>
+
   </form>
   <div id="response"></div>
 </div>
 
 
 <script>
-  
+  const nameInput = document.querySelector('input[name="name"]');
+    const emailInput = document.querySelector('input[name="email"]');
+    const sessionSelect = document.querySelector('select[name="session"]');
   let isCheckoutInProgress = false;  // Declare the flag globally at the top
 
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyELkAdi2y6FuPSGTo-gIXXUipZh85I-aeDyRUsBJm7jvQzL5RORbUKeyvkPqxWGjv0oA/exec'; // Replace with your Apps Script URL
@@ -534,7 +594,14 @@ form input, form select {
   const proceedBtn = document.getElementById('checkout-button');
   proceedBtn.querySelector('.btn-text').textContent = 'Proceed to payment';
   proceedBtn.querySelector('.submitspinner').style.visibility = 'hidden';
+  
+  nameInput.disabled = false;
+  emailInput.disabled = false;
+  sessionSelect.disabled = false;
+
   isCheckoutInProgress = false;
+
+
 }
 
 function displayProducts() {
@@ -591,15 +658,15 @@ function displayProducts() {
   // Add pulse effect to the "Add to basket" button
   const addToCartBtn = document.querySelector(`button[onclick="addToCart('${productId}')"]`);
   addToCartBtn.classList.add('pulse');
+  addToCartBtn.classList.add('no-hover');  // Disable hover effect during pulse
 
   // Remove pulse class after animation ends
-  setTimeout(() => {
+   setTimeout(() => {
     addToCartBtn.classList.remove('pulse');
-  }, 500); // Match the duration of the pulse animation
+    addToCartBtn.classList.remove('no-hover');
+  }, 800); // Match the duration of the pulse animation
     
-    
-    
-    
+        
     updateCartUI();
   }
 
@@ -645,6 +712,7 @@ function displayProducts() {
     if (checkoutBtn) {
     checkoutBtn.disabled = cart.length === 0;
   }
+   
   localStorage.setItem('cart', JSON.stringify(cart));
   }
 
@@ -683,8 +751,17 @@ function displayProducts() {
   document.getElementById('checkout-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Disable all buttons on the page
+      localStorage.setItem('name', nameInput.value);
+      localStorage.setItem('email', emailInput.value);
+      localStorage.setItem('session', sessionSelect.value);
+
+    // Disable all buttons on the page and the checkout input boxes
     document.querySelectorAll('button').forEach(btn => btn.disabled = true);
+    // Disable name, email, and session input fields
+    
+    nameInput.disabled = true;
+    emailInput.disabled = true;
+    sessionSelect.disabled = true;
 
     // Change button text and show spinner
     const proceedBtn = document.getElementById('checkout-button');
@@ -742,6 +819,18 @@ try {
 
   fetchProducts();
   const savedCart = localStorage.getItem('cart');
+  
+    
+    // Retrieve saved values from localStorage if they exist
+    const savedName = localStorage.getItem('name');
+    const savedEmail = localStorage.getItem('email');
+    const savedSession = localStorage.getItem('session');
+
+    // Set the input fields to the saved values
+    if (savedName) nameInput.value = savedName;
+    if (savedEmail) emailInput.value = savedEmail;
+    if (savedSession) sessionSelect.value = savedSession;
+
   if (savedCart) {
     cart = JSON.parse(savedCart);
   }
