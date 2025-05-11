@@ -177,6 +177,9 @@
       
       // This function deletes any form data previously saved to local storage
         localStorage.removeItem('cart');
+        localStorage.removeItem('name');
+        localStorage.removeItem('email');
+        localStorage.removeItem('session');
       
       // Get 'id' param from URL (case-insensitive)          
       const urlParams = new URLSearchParams(window.location.search);
